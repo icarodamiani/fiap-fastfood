@@ -1,0 +1,50 @@
+configurations {
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+dependencies {
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+
+    // Reactive Spring MVC implementation.
+    implementation('org.springframework.boot:spring-boot-starter-webflux')
+
+    //MongoDB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+
+    // Vavr
+    implementation 'io.vavr:vavr:0.10.4'
+
+    // Orika
+    implementation 'ma.glasnost.orika:orika-core:1.5.4'
+
+    // BeanUtils
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+
+    // Kotlin∫
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
+    implementation 'io.projectreactor.addons:reactor-extra'
+
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+    // Random Beans
+    testImplementation 'io.github.benas:random-beans:3.9.0'
+
+    // Test
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test:3.4.18'
+
+    // JUnit 5
+    testImplementation 'org.junit.platform:junit-platform-runner:1.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.0'
+    testImplementation 'org.mockito:mockito-core:4.6.0'
+    testImplementation('org.mockito.kotlin:mockito-kotlin:4.0.0') {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.mockito'
+    }
+    testImplementation 'net.bytebuddy:byte-buddy:1.14.2'
+}
