@@ -4,15 +4,3 @@ spring:
 
   profiles:
     active: test
-
-  data:
-    mongodb:
-      repositories: true
-      port: ${MONGODB_PORT:27017}
-      auto-index-creation: true
-      uuid-representation: standard
-      host: ${MONGODB_HOST:localhost}
-      authentication-database: admin
-      database: ${MONGODB_DATABASE:fastfood}
-      username: ${MONGODB_USERNAME:root}
-      password: ${MONGODB_PASSWORD:rootpassword}

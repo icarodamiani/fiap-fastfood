@@ -8,8 +8,9 @@ dependencies {
     // Reactive Spring MVC implementation.
     implementation('org.springframework.boot:spring-boot-starter-webflux')
 
-    //MongoDB
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    // Mysql
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc:3.1.4'
+    implementation 'dev.miku:r2dbc-mysql:0.8.2.RELEASE'
 
     // Vavr
     implementation 'io.vavr:vavr:0.10.4'
