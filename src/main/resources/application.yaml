@@ -2,10 +2,16 @@ spring:
   application:
     name: fiap-fastfood
 
+  cors:
+    allowed-origins: "http://localhost:8000"
+    allowed-headers: "Authorization, Content-Type, Accept"
+    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,HEAD,TRACE,CONNECT,PATCH"
+    max-age: 300
+
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
 
   r2dbc:
-    url: r2dbc:pool:mysql://${DB_HOST:localhost}:${DB_PORT}/${DB_DATABASE:fastfood}?zeroDateTimeBehavior=convertToNull&useSSL=false&useServerPrepareStatement=true
+    url: r2dbc:pool:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_DATABASE:fastfood}?zeroDateTimeBehavior=convertToNull&useSSL=false&useServerPrepareStatement=true
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:rootpassword}
