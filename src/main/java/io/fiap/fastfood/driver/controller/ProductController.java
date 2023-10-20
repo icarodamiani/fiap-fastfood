@@ -5,9 +5,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import io.fiap.fastfood.driven.infrastructure.core.exception.domain.product.mapper.ProductMapper;
-import io.fiap.fastfood.driven.infrastructure.core.exception.domain.product.port.inbound.ProductUseCase;
-import io.fiap.fastfood.driven.infrastructure.core.exception.HttpStatusExceptionConverter;
+import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
+import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductMapper;
+import io.fiap.fastfood.driven.core.exception.domain.product.port.inbound.ProductUseCase;
 import io.fiap.fastfood.driver.controller.dto.ProductDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,10 +38,10 @@ public class ProductController {
 
     private static final Logger LOGGER = getLogger(ProductController.class);
 
-    private ProductMapper mapper;
-    private ProductUseCase productUseCase;
+    private final ProductMapper mapper;
+    private final ProductUseCase productUseCase;
 
-    private HttpStatusExceptionConverter httpStatusExceptionConverter;
+    private final HttpStatusExceptionConverter httpStatusExceptionConverter;
 
     public ProductController(ProductMapper mapper,
                              ProductUseCase productUseCase,
@@ -76,7 +76,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<ProductDTO>> update(@PathVariable String id,
+    public Mono<ResponseEntity<ProductDTO>> update(@PathVariable Long id,
                                                    @RequestBody JsonPatch operations) {
         return productUseCase.update(id, operations)
             .map(mapper::dtoFromDomain)
@@ -95,7 +95,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
+    public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
         return productUseCase.delete(id)
             .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
             .defaultIfEmpty(ResponseEntity.noContent().build())
@@ -112,7 +112,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Flux<ProductDTO> find(@RequestParam(required = false) String typeId, Pageable pageable) {
+    public Flux<ProductDTO> find(@RequestParam(required = false) Long typeId, Pageable pageable) {
         return productUseCase.list(typeId, pageable)
             .map(mapper::dtoFromDomain)
             .onErrorMap(e ->
