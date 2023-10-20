@@ -200,13 +200,13 @@ ENGINE = InnoDB;
 -- Table `fastfood`.`status_pagamento`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `fastfood`.`status_pagamento` (
-  `idstatus_pagamento` INT NOT NULL,
-  `pagamento_id_pagamento` INT NOT NULL,
+  `id_status_pagamento` INT NOT NULL,
+  `id_pagamento` INT NOT NULL,
   `descricao` VARCHAR(45) NULL,
-  PRIMARY KEY (`idstatus_pagamento`),
-  INDEX `fk_status_pagamento_pagamento1_idx` (`pagamento_id_pagamento` ASC) VISIBLE,
+  PRIMARY KEY (`id_status_pagamento`),
+  INDEX `fk_status_pagamento_pagamento1_idx` (`id_pagamento` ASC) VISIBLE,
   CONSTRAINT `fk_status_pagamento_pagamento1`
-    FOREIGN KEY (`pagamento_id_pagamento`)
+    FOREIGN KEY (`id_pagamento`)
     REFERENCES `fastfood`.`pagamento` (`id_pagamento`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
