@@ -5,12 +5,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import io.fiap.fastfood.core.domain.product.mapper.ProductMapper;
-import io.fiap.fastfood.core.domain.product.port.inbound.CreateProductUseCase;
-import io.fiap.fastfood.core.domain.product.port.inbound.DeleteProductUseCase;
-import io.fiap.fastfood.core.domain.product.port.inbound.ListProductUseCase;
-import io.fiap.fastfood.core.domain.product.port.inbound.UpdateProductUseCase;
-import io.fiap.fastfood.core.exception.HttpStatusExceptionConverter;
+import io.fiap.fastfood.driven.infrastructure.core.exception.domain.product.mapper.ProductMapper;
+import io.fiap.fastfood.driven.infrastructure.core.exception.domain.product.port.inbound.ProductUseCase;
+import io.fiap.fastfood.driven.infrastructure.core.exception.HttpStatusExceptionConverter;
 import io.fiap.fastfood.driver.controller.dto.ProductDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,24 +39,15 @@ public class ProductController {
     private static final Logger LOGGER = getLogger(ProductController.class);
 
     private ProductMapper mapper;
-    private CreateProductUseCase createProductUseCase;
-    private UpdateProductUseCase updateProductUseCase;
-    private DeleteProductUseCase deleteProductUseCase;
-    private ListProductUseCase listProductUseCase;
+    private ProductUseCase productUseCase;
 
     private HttpStatusExceptionConverter httpStatusExceptionConverter;
 
     public ProductController(ProductMapper mapper,
-                             CreateProductUseCase createProductUseCase,
-                             UpdateProductUseCase updateProductUseCase,
-                             DeleteProductUseCase deleteProductUseCase,
-                             ListProductUseCase listProductUseCase,
+                             ProductUseCase productUseCase,
                              HttpStatusExceptionConverter httpStatusExceptionConverter) {
         this.mapper = mapper;
-        this.createProductUseCase = createProductUseCase;
-        this.updateProductUseCase = updateProductUseCase;
-        this.deleteProductUseCase = deleteProductUseCase;
-        this.listProductUseCase = listProductUseCase;
+        this.productUseCase = productUseCase;
         this.httpStatusExceptionConverter = httpStatusExceptionConverter;
     }
 
@@ -72,7 +60,7 @@ public class ProductController {
         @ApiResponse(responseCode = "409", description = "Duplicated", content = @Content)
     })
     public Mono<ResponseEntity<ProductDTO>> create(@Validated @RequestBody ProductDTO value) {
-        return createProductUseCase.create(mapper.domainFromDto(value))
+        return productUseCase.create(mapper.domainFromDto(value))
             .map(mapper::dtoFromDomain)
             .map(v -> ResponseEntity.status(HttpStatus.CREATED).body(v))
             .onErrorMap(e ->
@@ -90,7 +78,7 @@ public class ProductController {
     })
     public Mono<ResponseEntity<ProductDTO>> update(@PathVariable String id,
                                                    @RequestBody JsonPatch operations) {
-        return updateProductUseCase.update(id, operations)
+        return productUseCase.update(id, operations)
             .map(mapper::dtoFromDomain)
             .map(ResponseEntity::ok)
             .defaultIfEmpty(ResponseEntity.notFound().build())
@@ -108,7 +96,7 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
     public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
-        return deleteProductUseCase.delete(id)
+        return productUseCase.delete(id)
             .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
             .defaultIfEmpty(ResponseEntity.noContent().build())
             .onErrorMap(e ->
@@ -125,7 +113,7 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
     public Flux<ProductDTO> find(@RequestParam(required = false) String typeId, Pageable pageable) {
-        return listProductUseCase.list(typeId, pageable)
+        return productUseCase.list(typeId, pageable)
             .map(mapper::dtoFromDomain)
             .onErrorMap(e ->
                 new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))

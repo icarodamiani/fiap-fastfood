@@ -1,6 +1,6 @@
 package io.fiap.fastfood.driven.infrastructure.repository;
 
-import io.fiap.fastfood.core.entity.ProductEntity;
+import io.fiap.fastfood.driven.infrastructure.core.entity.ProductEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;

@@ -14,7 +14,7 @@ dependencies {
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.2.0'
 
-    implementation 'org.mapstruct:map`struct:1.5.5.Final'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     implementation "com.github.java-json-tools:json-patch:1.13"

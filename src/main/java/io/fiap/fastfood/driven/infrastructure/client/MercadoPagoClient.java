@@ -1,7 +1,7 @@
 package io.fiap.fastfood.driven.infrastructure.client;
 
-import io.fiap.fastfood.core.entity.CustomerEntity;
-import io.fiap.fastfood.core.entity.OrderEntity;
+import io.fiap.fastfood.driven.infrastructure.core.entity.CustomerEntity;
+import io.fiap.fastfood.driven.infrastructure.core.entity.OrderEntity;
 import io.fiap.fastfood.driven.infrastructure.client.dto.MercadoPagoResponse;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
