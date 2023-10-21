@@ -30,7 +30,7 @@ public class SalesPointAdapter implements SalesPointPort {
     }
 
     @Override
-    public Mono<SalesPoint> createProduct(SalesPoint product) {
+    public Mono<SalesPoint> createSalesPoint(SalesPoint product) {
         return salesPointRepository.save(mapper.entityFromDomain(product))
                 .map(mapper::domainFromEntity);
     }
@@ -42,7 +42,7 @@ public class SalesPointAdapter implements SalesPointPort {
     }
 
     @Override
-    public Mono<SalesPoint> updateProduct(Long id, JsonPatch operations) {
+    public Mono<SalesPoint> updateSalesPoint(Long id, JsonPatch operations) {
         return salesPointRepository.findById(id)
                 .map(salesPoint -> applyPatch().unchecked().apply(salesPoint, operations))
                 .flatMap(salesPointRepository::save)
@@ -51,7 +51,7 @@ public class SalesPointAdapter implements SalesPointPort {
     }
 
     @Override
-    public Mono<Void> deleteProduct(Long id) {
+    public Mono<Void> deleteSalesPoint(Long id) {
         return salesPointRepository.deleteById(id);
     }
 

@@ -20,7 +20,7 @@ public class SalesPointService implements SalesPointUseCase {
     @Override
     public Mono<SalesPoint> create(SalesPoint salesPoint) {
         return Mono.just(salesPoint)
-                .flatMap(salesPointPort::createProduct)
+                .flatMap(salesPointPort::createSalesPoint)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())));
     }
 
@@ -32,12 +32,12 @@ public class SalesPointService implements SalesPointUseCase {
     @Override
     public Mono<Void> delete(Long id) {
         return Mono.just(id)
-                .flatMap(salesPointPort::deleteProduct)
+                .flatMap(salesPointPort::deleteSalesPoint)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())));
     }
 
     @Override
     public Mono<SalesPoint> update(Long id, JsonPatch operations) {
-        return salesPointPort.updateProduct(id, operations);
+        return salesPointPort.updateSalesPoint(id, operations);
     }
 }
