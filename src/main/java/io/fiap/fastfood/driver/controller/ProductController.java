@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.List;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -77,7 +78,7 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
     public Mono<ResponseEntity<ProductDTO>> update(@PathVariable Long id,
-                                                   @RequestBody JsonPatch operations) {
+                                                   @RequestBody String operations) {
         return productUseCase.update(id, operations)
             .map(mapper::dtoFromDomain)
             .map(ResponseEntity::ok)

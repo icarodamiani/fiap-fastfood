@@ -1,6 +1,5 @@
 package io.fiap.fastfood.driven.adapter;
 
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,9 +15,7 @@ import io.fiap.fastfood.driven.core.exception.BadRequestException;
 import io.fiap.fastfood.driven.core.exception.domain.model.Product;
 import io.fiap.fastfood.driven.core.exception.domain.model.ProductType;
 import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductMapper;
-import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductTypeMapper;
 import io.fiap.fastfood.driven.repository.ProductRepository;
-import io.fiap.fastfood.driven.repository.ProductTypeRepository;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,15 +39,8 @@ class ProductAdapterTest {
 
     @Mock
     private ProductRepository productRepository;
-
-    @Mock
-    private ProductTypeRepository productTypeRepository;
-
     @Mock
     private ProductMapper mapper;
-
-    @Mock
-    private ProductTypeMapper typeMapper;
 
     @Spy
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -59,10 +49,6 @@ class ProductAdapterTest {
     void createProduct_success() {
         long typeId = 5L;
         var domainType = ProductType.ProductTypeBuilder.builder()
-            .withDescription("any")
-            .withId(typeId).build();
-
-        var entityType = ProductTypeEntity.ProductTypeEntityBuilder.builder()
             .withDescription("any")
             .withId(typeId).build();
 
@@ -94,8 +80,6 @@ class ProductAdapterTest {
             .withTypeId(typeId).build();
 
 
-        when(typeMapper.entityFromDomain(domainType)).thenReturn(entityType);
-        when(productTypeRepository.save(entityType)).thenReturn(Mono.just(entityType));
         when(mapper.entityFromDomain(domain)).thenReturn(entity);
         when(productRepository.save(entity)).thenReturn(Mono.just(response));
         when(mapper.domainFromEntity(response)).thenReturn(expected);
@@ -145,11 +129,6 @@ class ProductAdapterTest {
 
         when(productRepository.findByTypeId(typeId, unpaged)).thenReturn(Flux.just(response));
         when(mapper.domainFromEntity(response)).thenReturn(expected);
-        when(productTypeRepository.findById(typeId)).thenReturn(
-            Mono.just(
-                ProductTypeEntity.ProductTypeEntityBuilder.builder().withId(typeId).withDescription("any").build()
-            )
-        );
 
         StepVerifier.create(adapter.listProduct(typeId, unpaged))
             .expectNext(expected)
@@ -180,11 +159,6 @@ class ProductAdapterTest {
             .withTypeId(5L).build();
 
         when(productRepository.findByIdNotNull(unpaged)).thenReturn(Flux.just(response));
-        when(productTypeRepository.findById(5L)).thenReturn(
-            Mono.just(
-                ProductTypeEntity.ProductTypeEntityBuilder.builder().withId(5L).withDescription("any").build()
-            )
-        );
         when(mapper.domainFromEntity(response)).thenReturn(expected);
 
         StepVerifier.create(adapter.listProduct(typeId, unpaged))
@@ -193,7 +167,6 @@ class ProductAdapterTest {
             .verify();
 
         verify(productRepository, times(1)).findByIdNotNull(unpaged);
-        verify(productTypeRepository, times(1)).findById(anyLong());
         verify(mapper, times(1)).domainFromEntity(response);
     }
 
@@ -224,7 +197,7 @@ class ProductAdapterTest {
         when(productRepository.save(patched)).thenReturn(Mono.just(patched));
         when(mapper.domainFromEntity(patched)).thenReturn(expected);
 
-        StepVerifier.create(adapter.updateProduct(id, patch))
+        StepVerifier.create(adapter.updateProduct(id, json))
             .expectNext(expected)
             .expectComplete()
             .verify();
@@ -235,7 +208,7 @@ class ProductAdapterTest {
     }
 
     @Test
-    void updateProduct_unknown_path() throws IOException {
+    void updateProduct_unknown_path() {
         long id = 1L;
         long typeId = 5L;
 
@@ -246,8 +219,7 @@ class ProductAdapterTest {
             .withDescription("anyProduct")
             .withTypeId(typeId).build();
 
-        String json = "[{ \"op\":\"replace\", \"path\":\"/unknown\", \"value\":\"any value\" }]";
-        var patch = jsonPatch(json);
+        String patch = "[{ \"op\":\"replace\", \"path\":\"/unknown\", \"value\":\"any value\" }]";
 
         when(productRepository.findById(id)).thenReturn(Mono.just(entity));
 

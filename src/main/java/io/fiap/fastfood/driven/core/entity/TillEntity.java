@@ -2,22 +2,22 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("caixa")
+@Document("caixa")
 public class TillEntity { // CashDesk? BillingDay?
     @Id
-    @Column("id_caixa")
+    @Field("id_caixa")
     private Long id;
 
-    @Column("data_hora_abertura")
+    @Field("data_hora_abertura")
     private String openAt;
 
-    @Column("data_hora_fechamento")
+    @Field("data_hora_fechamento")
     private String closedAt;
 
-    @Column("id_ponto_venda")
+    @Field("id_ponto_venda")
     private String salesPointId;
 
     public TillEntity() {

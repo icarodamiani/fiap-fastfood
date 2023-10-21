@@ -2,25 +2,24 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("cliente")
 public class CustomerEntity {
     @Id
-    @Column("id_cliente")
+    @Field("id_cliente")
     private Long id;
 
-    @Column("nome")
+    @Field("nome")
     private String name;
 
-    @Column("documento")
+    @Field("documento")
     private String identity;
 
-    @Column("email")
+    @Field("email")
     private String email;
 
-    @Column("telefone")
+    @Field("telefone")
     private String number;
 
     public CustomerEntity() {

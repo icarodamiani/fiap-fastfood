@@ -11,8 +11,10 @@ import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductMappe
 import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductTypeMapper;
 import io.fiap.fastfood.driven.core.exception.domain.product.port.outbound.ProductPort;
 import io.fiap.fastfood.driven.repository.ProductRepository;
-import io.fiap.fastfood.driven.repository.ProductTypeRepository;
+import io.vavr.CheckedFunction1;
 import io.vavr.CheckedFunction2;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -22,25 +24,20 @@ import reactor.core.publisher.Mono;
 @Component
 public class ProductAdapter implements ProductPort {
     private final ProductRepository productRepository;
-    private final ProductTypeRepository productTypeRepository;
     private final ProductMapper mapper;
-    private final ProductTypeMapper typeMapper;
     private final ObjectMapper objectMapper;
 
     public ProductAdapter(ProductRepository productRepository,
-                          ProductTypeRepository productTypeRepository, ProductMapper mapper,
+                          ProductMapper mapper,
                           ProductTypeMapper typeMapper, ObjectMapper objectMapper) {
         this.productRepository = productRepository;
-        this.productTypeRepository = productTypeRepository;
         this.mapper = mapper;
-        this.typeMapper = typeMapper;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public Mono<Product> createProduct(Product product) {
-        return productTypeRepository.save(typeMapper.entityFromDomain(product.type()))
-            .then(productRepository.save(mapper.entityFromDomain(product)))
+        return productRepository.save(mapper.entityFromDomain(product))
             .map(mapper::domainFromEntity);
     }
 
@@ -50,7 +47,7 @@ public class ProductAdapter implements ProductPort {
     }
 
     @Override
-    public Mono<Product> updateProduct(Long id, JsonPatch operations) {
+    public Mono<Product> updateProduct(Long id, String operations) {
         return productRepository.findById(id)
             .map(product -> applyPatch().unchecked().apply(product, operations))
             .flatMap(productRepository::save)
@@ -58,10 +55,22 @@ public class ProductAdapter implements ProductPort {
             .onErrorMap(JsonPatchException.class::isInstance, BadRequestException::new);
     }
 
-    private CheckedFunction2<ProductEntity, JsonPatch, ProductEntity> applyPatch() {
+    private CheckedFunction2<ProductEntity, String, ProductEntity> applyPatch() {
         return (product, operations) -> {
-            var patched = operations.apply(objectMapper.convertValue(product, JsonNode.class));
+            var patch = readOperations()
+                .unchecked()
+                .apply(operations);
+
+            var patched = patch.apply(objectMapper.convertValue(product, JsonNode.class));
+
             return objectMapper.treeToValue(patched, ProductEntity.class);
+        };
+    }
+
+    private CheckedFunction1<String, JsonPatch> readOperations() {
+        return operations -> {
+            final InputStream in = new ByteArrayInputStream(operations.getBytes());
+            return objectMapper.readValue(in, JsonPatch.class);
         };
     }
 
@@ -71,12 +80,6 @@ public class ProductAdapter implements ProductPort {
             .filter(Optional::isEmpty)
             .flatMap(__ -> productRepository.findByIdNotNull(pageable))
             .switchIfEmpty(Flux.defer(() -> productRepository.findByTypeId(typeId, pageable)))
-            .flatMap(entity -> productTypeRepository.findById(entity.getTypeId())
-                .map(productTypeEntity -> {
-                        entity.setType(productTypeEntity);
-                        return entity;
-                    }
-                ))
             .map(mapper::domainFromEntity);
     }
 }

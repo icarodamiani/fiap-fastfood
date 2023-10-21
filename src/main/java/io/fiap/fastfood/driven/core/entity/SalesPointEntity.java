@@ -2,16 +2,16 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("ponto_venda")
+@Document("ponto_venda")
 public class SalesPointEntity {
     @Id
-    @Column("id_ponto_venda")
+    @Field("id_ponto_venda")
     private Long id;
 
-    @Column("descricao")
+    @Field("descricao")
     private String description;
 
     public SalesPointEntity() {

@@ -2,25 +2,25 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("item_pedido")
+@Document("item_pedido")
 public class OrderItemEntity {
     @Id
-    @Column("id_item_pedido")
+    @Field("id_item_pedido")
     private Long id;
 
-    @Column("id_pedido")
+    @Field("id_pedido")
     private String orderId;
 
-    @Column("id_produto")
+    @Field("id_produto")
     private String productId;
 
-    @Column("quantidade")
+    @Field("quantidade")
     private String amount;
 
-    @Column("obeservacao")
+    @Field("obeservacao")
     private String quote;
 
     public OrderItemEntity() {
