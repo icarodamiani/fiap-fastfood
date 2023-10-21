@@ -11,6 +11,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc:3.1.4'
     implementation 'dev.miku:r2dbc-mysql:0.8.2.RELEASE'
 
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.2.0'
+
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    implementation "com.github.java-json-tools:json-patch:1.13"
+
     // Vavr
     implementation 'io.vavr:vavr:0.10.4'
 

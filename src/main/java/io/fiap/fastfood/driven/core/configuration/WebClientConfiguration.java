@@ -1,4 +1,4 @@
-package io.fiap.fastfood.infrastructure.configuration;
+package io.fiap.fastfood.driven.core.configuration;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslContext;
