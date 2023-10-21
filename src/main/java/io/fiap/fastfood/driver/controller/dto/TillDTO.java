@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record TillDTO(
         Long id,
         LocalDateTime openAt,
-        LocalDateTime closedAt
+        LocalDateTime closedAt,
+        Long idSalesPoint
 ) {
 }

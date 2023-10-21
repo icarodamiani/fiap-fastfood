@@ -16,16 +16,13 @@ public class SalesPointEntity {
     @Column("descricao")
     private String description;
 
-    private List<TillEntity> tills;
-
     public SalesPointEntity() {
         //default
     }
 
-    public SalesPointEntity(Long id, String description, List<TillEntity> tills) {
+    public SalesPointEntity(Long id, String description) {
         this.id = id;
         this.description = description;
-        this.tills = tills;
     }
 
     public SalesPointEntity(String description) {
@@ -48,25 +45,16 @@ public class SalesPointEntity {
         this.description = description;
     }
 
-    public List<TillEntity> getTills() {
-        return tills;
-    }
-
-    public void setTills(List<TillEntity> tills) {
-        this.tills = tills;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SalesPointEntity that = (SalesPointEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(description, that.description)
-                && Objects.equals(tills, that.tills);
+        return Objects.equals(id, that.id) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, tills);
+        return Objects.hash(id, description);
     }
 }

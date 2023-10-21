@@ -18,14 +18,18 @@ public class TillEntity { // CashDesk? BillingDay?
     @Column("data_hora_fechamento")
     private String closedAt;
 
+    @Column("id_ponto_venda")
+    private Long idSalesPoint;
+
 
     public TillEntity() {
     }
 
-    public TillEntity(Long id, String openAt, String closedAt) {
+    public TillEntity(Long id, String openAt, String closedAt, Long idSalesPoint) {
         this.id = id;
         this.openAt = openAt;
         this.closedAt = closedAt;
+        this.idSalesPoint = idSalesPoint;
     }
 
     public TillEntity(String openAt, String closedAt) {
@@ -57,17 +61,25 @@ public class TillEntity { // CashDesk? BillingDay?
         this.closedAt = closedAt;
     }
 
+    public Long getIdSalesPoint() {
+        return idSalesPoint;
+    }
+
+    public void setIdSalesPoint(Long idSalesPoint) {
+        this.idSalesPoint = idSalesPoint;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TillEntity till = (TillEntity) o;
-        return Objects.equals(id, till.id) && Objects.equals(openAt, till.openAt)
-                && Objects.equals(closedAt, till.closedAt);
+        TillEntity that = (TillEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(openAt, that.openAt)
+                && Objects.equals(closedAt, that.closedAt) && Objects.equals(idSalesPoint, that.idSalesPoint);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, openAt, closedAt);
+        return Objects.hash(id, openAt, closedAt, idSalesPoint);
     }
 }

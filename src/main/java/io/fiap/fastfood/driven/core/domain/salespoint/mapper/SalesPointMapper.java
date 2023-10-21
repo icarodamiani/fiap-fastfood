@@ -13,6 +13,4 @@ public interface SalesPointMapper {
     SalesPointDTO dtoFromDomain(SalesPoint salesPoint);
 
     SalesPointEntity entityFromDomain(SalesPoint salesPoint);
-
-    SalesPoint domainFromEntity(SalesPointEntity salesPointEntity);
 }
