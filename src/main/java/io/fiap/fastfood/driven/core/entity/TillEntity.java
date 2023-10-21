@@ -1,9 +1,10 @@
 package io.fiap.fastfood.driven.core.entity;
 
-import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.util.Objects;
 
 @Table("caixa")
 public class TillEntity { // CashDesk? BillingDay?
@@ -17,23 +18,19 @@ public class TillEntity { // CashDesk? BillingDay?
     @Column("data_hora_fechamento")
     private String closedAt;
 
-    @Column("id_ponto_venda")
-    private String salesPointId;
 
     public TillEntity() {
     }
 
-    public TillEntity(Long id, String openAt, String closedAt, String salesPointId) {
+    public TillEntity(Long id, String openAt, String closedAt) {
         this.id = id;
         this.openAt = openAt;
         this.closedAt = closedAt;
-        this.salesPointId = salesPointId;
     }
 
-    public TillEntity(String openAt, String closedAt, String salesPointId) {
+    public TillEntity(String openAt, String closedAt) {
         this.openAt = openAt;
         this.closedAt = closedAt;
-        this.salesPointId = salesPointId;
     }
 
     public Long getId() {
@@ -60,24 +57,17 @@ public class TillEntity { // CashDesk? BillingDay?
         this.closedAt = closedAt;
     }
 
-    public String getSalesPointId() {
-        return salesPointId;
-    }
-
-    public void setSalesPointId(String salesPointId) {
-        this.salesPointId = salesPointId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TillEntity till = (TillEntity) o;
-        return Objects.equals(id, till.id) && Objects.equals(openAt, till.openAt) && Objects.equals(closedAt, till.closedAt) && Objects.equals(salesPointId, till.salesPointId);
+        return Objects.equals(id, till.id) && Objects.equals(openAt, till.openAt)
+                && Objects.equals(closedAt, till.closedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, openAt, closedAt, salesPointId);
+        return Objects.hash(id, openAt, closedAt);
     }
 }

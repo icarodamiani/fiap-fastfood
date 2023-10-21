@@ -6,8 +6,8 @@ import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 import com.github.fge.jsonpatch.JsonPatch;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductMapper;
-import io.fiap.fastfood.driven.core.exception.domain.product.port.inbound.ProductUseCase;
+import io.fiap.fastfood.driven.core.domain.product.mapper.ProductMapper;
+import io.fiap.fastfood.driven.core.domain.product.port.inbound.ProductUseCase;
 import io.fiap.fastfood.driver.controller.dto.ProductDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

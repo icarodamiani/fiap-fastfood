@@ -1,6 +1,6 @@
-package io.fiap.fastfood.driven.core.exception.domain.product.mapper;
+package io.fiap.fastfood.driven.core.domain.product.mapper;
 
-import io.fiap.fastfood.driven.core.exception.domain.model.Product;
+import io.fiap.fastfood.driven.core.domain.model.Product;
 import io.fiap.fastfood.driven.core.entity.ProductEntity;
 import io.fiap.fastfood.driver.controller.dto.ProductDTO;
 import org.mapstruct.Mapper;
