@@ -1,12 +1,18 @@
 package io.fiap.fastfood.driver.controller.dto;
 
-import io.fiap.fastfood.driven.core.domain.model.Till;
-
 import java.util.List;
 
 public record SalesPointDTO(
-        Long id,
         String description,
-        List<Till> tills
+        List<TillDTO> tills
 ) {
+    @Override
+    public String description() {
+        return description;
+    }
+
+    @Override
+    public List<TillDTO> tills() {
+        return tills;
+    }
 }

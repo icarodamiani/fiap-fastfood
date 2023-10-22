@@ -1,10 +1,10 @@
 package io.fiap.fastfood.driven.core.service;
 
-import com.github.fge.jsonpatch.JsonPatch;
 import io.fiap.fastfood.driven.core.domain.model.SalesPoint;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.inbound.SalesPointUseCase;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.outbound.SalesPointPort;
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
+import io.fiap.fastfood.driven.core.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -20,24 +20,24 @@ public class SalesPointService implements SalesPointUseCase {
     @Override
     public Mono<SalesPoint> create(SalesPoint salesPoint) {
         return Mono.just(salesPoint)
-                .flatMap(salesPointPort::createSalesPoint)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
+                .flatMap(salesPointPort::createSalesPoint);
     }
 
     @Override
-    public Mono<SalesPoint> find(Long id) {
+    public Mono<SalesPoint> find(String id) {
         return salesPointPort.findSalesPoint(id);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         return Mono.just(id)
                 .flatMap(salesPointPort::deleteSalesPoint)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException())));
     }
 
     @Override
-    public Mono<SalesPoint> update(Long id, JsonPatch operations) {
+    public Mono<SalesPoint> update(String id, String operations) {
         return salesPointPort.updateSalesPoint(id, operations);
     }
 }

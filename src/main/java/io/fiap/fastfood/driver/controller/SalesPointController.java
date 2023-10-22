@@ -1,6 +1,5 @@
 package io.fiap.fastfood.driver.controller;
 
-import com.github.fge.jsonpatch.JsonPatch;
 import io.fiap.fastfood.driven.core.domain.salespoint.mapper.SalesPointMapper;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.inbound.SalesPointUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
@@ -11,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +18,9 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
-@RequestMapping(value = "/v1/salespoint", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/salespoint", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SalesPointController {
     private static final Logger LOGGER = getLogger(io.fiap.fastfood.driver.controller.SalesPointController.class);
     private final SalesPointMapper mapper;
@@ -62,8 +60,8 @@ public class SalesPointController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<SalesPointDTO>> update(@PathVariable Long id,
-                                                      @RequestBody JsonPatch operations) {
+    public Mono<ResponseEntity<SalesPointDTO>> update(@PathVariable String id,
+                                                      @RequestBody String operations) {
         return salesPointUseCase.update(id, operations)
                 .map(mapper::dtoFromDomain)
                 .map(ResponseEntity::ok)
@@ -81,7 +79,7 @@ public class SalesPointController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
         return salesPointUseCase.delete(id)
                 .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
                 .defaultIfEmpty(ResponseEntity.noContent().build())
@@ -90,7 +88,7 @@ public class SalesPointController {
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @GetMapping(produces = TEXT_EVENT_STREAM_VALUE)
+    @GetMapping
     @Operation(description = "Find salespoint")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -98,7 +96,7 @@ public class SalesPointController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<SalesPointDTO> find(@RequestParam(required = false) Long id) {
+    public Mono<SalesPointDTO> find(@RequestParam(required = false) String id) {
         return salesPointUseCase.find(id)
                 .map(mapper::dtoFromDomain)
                 .onErrorMap(e ->

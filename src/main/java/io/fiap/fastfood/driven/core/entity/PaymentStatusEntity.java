@@ -2,19 +2,19 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("pedido")
+@Document("pedido")
 public class PaymentStatusEntity {
     @Id
-    @Column("id_status_pagamento")
+    @Field("id_status_pagamento")
     private Long id;
 
-    @Column("id_pagamento")
+    @Field("id_pagamento")
     private String paymentId;
 
-    @Column("descricao")
+    @Field("descricao")
     private String description;
 
     public PaymentStatusEntity() {

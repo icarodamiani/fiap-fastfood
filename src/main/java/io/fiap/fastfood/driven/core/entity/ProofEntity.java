@@ -2,22 +2,22 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("comprovante")
+@Document("comprovante")
 public class ProofEntity {
     @Id
-    @Column("id_comprovante")
+    @Field("id_comprovante")
     private Long id;
 
-    @Column("id_pedido")
+    @Field("id_pedido")
     private String orderId; //Não seria um comprovante de pagamento? Acho que o vínculo está errado.
 
-    @Column("data_hora_emissao")
+    @Field("data_hora_emissao")
     private String emittedAt;
 
-    @Column("numero")
+    @Field("numero")
     private String number;
 
     public ProofEntity() {

@@ -1,10 +1,9 @@
 package io.fiap.fastfood.driven.core.service;
 
-import com.github.fge.jsonpatch.JsonPatch;
-import io.fiap.fastfood.driven.core.exception.BadRequestException;
 import io.fiap.fastfood.driven.core.domain.model.Product;
 import io.fiap.fastfood.driven.core.domain.product.port.inbound.ProductUseCase;
 import io.fiap.fastfood.driven.core.domain.product.port.outbound.ProductPort;
+import io.fiap.fastfood.driven.core.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -23,8 +22,8 @@ public class ProductService implements ProductUseCase {
     @Override
     public Mono<Product> create(Product product) {
         return Mono.just(product)
-            .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
-            .flatMap(productPort::createProduct);
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
+                .flatMap(productPort::createProduct);
     }
 
     @Override
@@ -35,13 +34,12 @@ public class ProductService implements ProductUseCase {
     @Override
     public Mono<Void> delete(Long id) {
         return Mono.just(id)
-            .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
-            .flatMap(productPort::deleteProduct);
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
+                .flatMap(productPort::deleteProduct);
     }
 
-
     @Override
-    public Mono<Product> update(Long id, JsonPatch operations) {
+    public Mono<Product> update(Long id, String operations) {
         return productPort.updateProduct(id, operations);
     }
 

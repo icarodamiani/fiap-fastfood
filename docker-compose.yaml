@@ -1,16 +1,20 @@
-version: '3.1'
+version: '3.8'
 
 services:
-  db:
-    image: mysql
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
-    restart: always
+  mongo:
+    image: docker.io/zcube/bitnami-compat-mongodb:5.0
+    container_name: mongo
     ports:
-      - "3306:3306"
+      - "27017:27017"
+    networks:
+      - fastfood-network
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MONGODB_USERNAME: common_user
+      MONGODB_PASSWORD: password123
+      MONGODB_DATABASE: fastfood
+      MONGODB_ROOT_PASSWORD: rootpassword
     volumes:
-      - "./db/fiapfastfood.sql:/docker-entrypoint-initdb.d/fiapfastfood.sql"
+      - 'mongodb_data:/fastfood'
 
   fastfood:
     container_name: fiap-fastfood
@@ -21,18 +25,23 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      - mongo
     links:
-      - db
+      - mongo
     networks:
       - fastfood-network
     environment:
       SPRING_PROFILES_ACTIVE: local
-      DB_HOST: localhost
-      DB_PORT: 3306
-      DB_DATABASE: fastfood
-      DB_USERNAME: root
-      DB_PASSWORD: rootpassword
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: rootpassword
+      MONGODB_DATABASE: fastfood
+      MONGODB_AUTHDB: admin
+
+volumes:
+  mongodb_data:
+    driver: local
 
 networks:
   fastfood-network:

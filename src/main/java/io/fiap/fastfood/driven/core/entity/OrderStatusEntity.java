@@ -2,22 +2,22 @@ package io.fiap.fastfood.driven.core.entity;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Table("status_pedido")
+@Document("status_pedido")
 public class OrderStatusEntity {
     @Id
-    @Column("id_status")
+    @Field("id_status")
     private Long id;
 
-    @Column("nome")
+    @Field("nome")
     private String name;
 
-    @Column("descricao")
+    @Field("descricao")
     private String description; // accountId?
 
-    @Column("habilitado_cliente")
+    @Field("habilitado_cliente")
     private Boolean customerFriendly;
 
     public OrderStatusEntity() {
