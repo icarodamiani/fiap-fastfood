@@ -3,31 +3,72 @@ package io.fiap.fastfood.driven.core.domain.salespoint.mapper;
 import io.fiap.fastfood.driven.core.domain.model.Till;
 import io.fiap.fastfood.driven.core.entity.TillEntity;
 import io.fiap.fastfood.driver.controller.dto.TillDTO;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-@Component
-public class TillMapper {
-    Till domainFromDto(TillDTO tillDTO) {
-        return new Till(
-                ZonedDateTime.parse(tillDTO.openAt()),
-                ZonedDateTime.parse(tillDTO.closedAt()));
+@Mapper(componentModel = "spring")
+public interface TillMapper {
+
+    @Mapping(source = "tillDTO", target = "openAt", qualifiedByName = "openAtDto")
+    @Mapping(source = "tillDTO", target = "closedAt", qualifiedByName = "closedAtDto")
+    Till domainFromDto(TillDTO tillDTO);
+
+    @Named("openAtDto")
+    default ZonedDateTime openAtDtoToDomain(TillDTO tillDTO) {
+        return ZonedDateTime.parse(tillDTO.openAt());
     }
 
-    TillDTO dtoFromDomain(Till till) {
-        return new TillDTO(till.openAt().toString(), till.closedAt().toString());
+    @Named("closedAtDto")
+    default ZonedDateTime closedAtDtoToDomain(TillDTO tillDTO) {
+        return ZonedDateTime.parse(tillDTO.openAt());
     }
 
-    TillEntity entityFromDomain(Till till) {
-        return new TillEntity(till.openAt().toLocalDateTime(), till.closedAt().toLocalDateTime());
+
+    @Mapping(source = "till", target = "openAt", qualifiedByName = "openAt")
+    @Mapping(source = "till", target = "closedAt", qualifiedByName = "closedAt")
+    TillDTO dtoFromDomain(Till till);
+
+    @Named("openAt")
+    default String openAtDtoToDomain(Till till) {
+        return till.openAt().toString();
     }
 
-    Till domainFromEntity(TillEntity tillEntity) {
-        return new Till(
-                tillEntity.getOpenAt().atZone(ZoneId.of("UTC").normalized()),
-                tillEntity.getClosedAt().atZone(ZoneId.of("UTC").normalized())
-        );
+    @Named("closedAt")
+    default String closedAtDomainToDto(Till till) {
+        return till.closedAt().toString();
     }
+
+    @Mapping(source = "till", target = "openAt", qualifiedByName = "openAtEntity")
+    @Mapping(source = "till", target = "closedAt", qualifiedByName = "closedAtEntity")
+    TillEntity entityFromDomain(Till till);
+
+    @Named("openAtEntity")
+    default LocalDateTime openAtDomainToEntity(Till till) {
+        return till.openAt().toLocalDateTime();
+    }
+
+    @Named("closedAtEntity")
+    default LocalDateTime closedAtDomainToEntity(Till till) {
+        return till.closedAt().toLocalDateTime();
+    }
+
+    @Mapping(source = "tillEntity", target = "openAt", qualifiedByName = "openAt")
+    @Mapping(source = "tillEntity", target = "closedAt", qualifiedByName = "closedAt")
+    Till domainFromEntity(TillEntity tillEntity);
+
+    @Named("openAt")
+    default ZonedDateTime openAtEntityToDomain(TillEntity tillEntity) {
+        return tillEntity.getOpenAt().atZone(ZoneId.of("UTC").normalized());
+    }
+
+    @Named("closedAt")
+    default ZonedDateTime closedAtDomainToEntity(TillEntity tillEntity) {
+        return tillEntity.getClosedAt().atZone(ZoneId.of("UTC").normalized());
+    }
+
 }

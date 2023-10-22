@@ -61,8 +61,8 @@ public class SalesPointController {
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
     public Mono<ResponseEntity<SalesPointDTO>> update(@PathVariable String id,
-                                                      @RequestBody String operations) {
-        return salesPointUseCase.update(id, operations)
+                                                      @RequestBody SalesPointDTO body) {
+        return salesPointUseCase.update(id, body)
                 .map(mapper::dtoFromDomain)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build())

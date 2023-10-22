@@ -4,7 +4,7 @@ import io.fiap.fastfood.driven.core.domain.model.SalesPoint;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.inbound.SalesPointUseCase;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.outbound.SalesPointPort;
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
-import io.fiap.fastfood.driven.core.exception.NotFoundException;
+import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -31,13 +31,11 @@ public class SalesPointService implements SalesPointUseCase {
 
     @Override
     public Mono<Void> delete(String id) {
-        return Mono.just(id)
-                .flatMap(salesPointPort::deleteSalesPoint)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException())));
+        return salesPointPort.deleteSalesPoint(id);
     }
 
     @Override
-    public Mono<SalesPoint> update(String id, String operations) {
-        return salesPointPort.updateSalesPoint(id, operations);
+    public Mono<SalesPoint> update(String id, SalesPointDTO salesPointDTO) {
+        return salesPointPort.updateSalesPoint(id, salesPointDTO);
     }
 }

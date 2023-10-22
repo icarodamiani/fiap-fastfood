@@ -1,6 +1,7 @@
 package io.fiap.fastfood.driven.core.domain.salespoint.port.inbound;
 
 import io.fiap.fastfood.driven.core.domain.model.SalesPoint;
+import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
 import reactor.core.publisher.Mono;
 
 public interface SalesPointUseCase {
@@ -10,5 +11,5 @@ public interface SalesPointUseCase {
 
     Mono<Void> delete(String id);
 
-    Mono<SalesPoint> update(String id, String operations);
+    Mono<SalesPoint> update(String id, SalesPointDTO operations);
 }
