@@ -1,10 +1,9 @@
 package io.fiap.fastfood.driven.core.service;
 
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
-import io.fiap.fastfood.driven.core.exception.domain.model.Product;
-import io.fiap.fastfood.driven.core.exception.domain.product.port.inbound.ProductUseCase;
-import io.fiap.fastfood.driven.core.exception.domain.product.port.outbound.ProductPort;
-import java.util.List;
+import io.fiap.fastfood.driven.core.domain.model.Product;
+import io.fiap.fastfood.driven.core.domain.product.port.inbound.ProductUseCase;
+import io.fiap.fastfood.driven.core.domain.product.port.outbound.ProductPort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
