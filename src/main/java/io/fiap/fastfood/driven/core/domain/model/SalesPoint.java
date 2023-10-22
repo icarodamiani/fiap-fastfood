@@ -6,6 +6,18 @@ public record SalesPoint(
         String id,
         String description,
         List<Till> tills) {
-    public SalesPoint {
+    @Override
+    public String id() {
+        return id;
+    }
+
+    @Override
+    public String description() {
+        return description;
+    }
+
+    @Override
+    public List<Till> tills() {
+        return tills;
     }
 }

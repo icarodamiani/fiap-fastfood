@@ -32,7 +32,7 @@ public class SalesPointMapper {
     }
 
     public SalesPointDTO dtoFromDomain(SalesPoint salesPoint) {
-        return new SalesPointDTO(salesPoint.description(), tillsDtoFromDomain(salesPoint.tills()));
+        return new SalesPointDTO(salesPoint.id(), salesPoint.description(), tillsDtoFromDomain(salesPoint.tills()));
     }
 
     private List<TillDTO> tillsDtoFromDomain(List<Till> tills) {
