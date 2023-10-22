@@ -5,14 +5,16 @@ import io.fiap.fastfood.driven.core.domain.salespoint.mapper.SalesPointMapper;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.outbound.SalesPointPort;
 import io.fiap.fastfood.driven.core.entity.SalesPointEntity;
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
-import io.fiap.fastfood.driven.core.exception.NotFoundException;
 import io.fiap.fastfood.driven.repository.SalesPointRepository;
 import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Component
@@ -34,10 +36,12 @@ public class SalesPointAdapter implements SalesPointPort {
     }
 
     @Override
-    public Mono<SalesPoint> findSalesPoint(String id) {
-        return salesPointRepository.findById(id)
-                .map(mapper::domainFromEntity)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException())));
+    public Flux<SalesPoint> findSalesPoint(String id, Pageable pageable) {
+        return Flux.just(Optional.ofNullable(id))
+                .filter(Optional::isEmpty)
+                .flatMap(__ -> salesPointRepository.findByIdNotNull(pageable))
+                .switchIfEmpty(Flux.defer(() -> salesPointRepository.findById(id, pageable)))
+                .map(mapper::domainFromEntity);
     }
 
     @Override

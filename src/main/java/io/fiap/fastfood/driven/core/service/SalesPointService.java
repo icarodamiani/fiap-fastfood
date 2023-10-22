@@ -5,7 +5,9 @@ import io.fiap.fastfood.driven.core.domain.salespoint.port.inbound.SalesPointUse
 import io.fiap.fastfood.driven.core.domain.salespoint.port.outbound.SalesPointPort;
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
 import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -25,8 +27,8 @@ public class SalesPointService implements SalesPointUseCase {
     }
 
     @Override
-    public Mono<SalesPoint> find(String id) {
-        return salesPointPort.findSalesPoint(id);
+    public Flux<SalesPoint> find(String id, Pageable pageable) {
+        return salesPointPort.findSalesPoint(id, pageable);
     }
 
     @Override

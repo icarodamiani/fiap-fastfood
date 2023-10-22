@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -96,8 +98,8 @@ public class SalesPointController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<SalesPointDTO> find(@RequestParam(required = false) String id) {
-        return salesPointUseCase.find(id)
+    public Flux<SalesPointDTO> find(@RequestParam(required = false) String id, Pageable pageable) {
+        return salesPointUseCase.find(id, pageable)
                 .map(mapper::dtoFromDomain)
                 .onErrorMap(e ->
                         new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))

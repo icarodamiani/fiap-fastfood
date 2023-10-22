@@ -2,12 +2,14 @@ package io.fiap.fastfood.driven.core.domain.salespoint.port.inbound;
 
 import io.fiap.fastfood.driven.core.domain.model.SalesPoint;
 import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
+import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface SalesPointUseCase {
     Mono<SalesPoint> create(SalesPoint salesPoint);
 
-    Mono<SalesPoint> find(String id);
+    Flux<SalesPoint> find(String id, Pageable pageable);
 
     Mono<Void> delete(String id);
 
