@@ -1,8 +1,8 @@
-version: '3.1'
+version: '3.8'
 
 services:
   mongo:
-    image: docker.io/bitnami/mongodb:5.0
+    image: docker.io/zcube/bitnami-compat-mongodb:5.0
     container_name: mongo
     ports:
       - "27017:27017"
@@ -32,11 +32,16 @@ services:
       - fastfood-network
     environment:
       SPRING_PROFILES_ACTIVE: local
-      DB_HOST: localhost
-      DB_PORT: 3306
-      DB_DATABASE: fastfood
-      DB_USERNAME: root
-      DB_PASSWORD: rootpassword
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: rootpassword
+      MONGODB_DATABASE: fastfood
+      MONGODB_AUTHDB: admin
+
+volumes:
+  mongodb_data:
+    driver: local
 
 networks:
   fastfood-network:

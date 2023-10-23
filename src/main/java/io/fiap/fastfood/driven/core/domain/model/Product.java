@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driven.core.exception.domain.model;
+package io.fiap.fastfood.driven.core.domain.model;
 
 import java.math.BigDecimal;
 import java.util.Optional;

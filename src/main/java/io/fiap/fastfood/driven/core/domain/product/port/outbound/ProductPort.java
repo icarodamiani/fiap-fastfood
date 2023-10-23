@@ -1,7 +1,6 @@
-package io.fiap.fastfood.driven.core.exception.domain.product.port.outbound;
+package io.fiap.fastfood.driven.core.domain.product.port.outbound;
 
-import io.fiap.fastfood.driven.core.exception.domain.model.Product;
-import java.util.List;
+import io.fiap.fastfood.driven.core.domain.model.Product;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

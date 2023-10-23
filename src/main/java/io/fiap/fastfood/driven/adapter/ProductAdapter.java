@@ -4,22 +4,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import io.fiap.fastfood.driven.core.domain.model.Product;
+import io.fiap.fastfood.driven.core.domain.product.mapper.ProductMapper;
+import io.fiap.fastfood.driven.core.domain.product.port.outbound.ProductPort;
 import io.fiap.fastfood.driven.core.entity.ProductEntity;
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
-import io.fiap.fastfood.driven.core.exception.domain.model.Product;
-import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductMapper;
-import io.fiap.fastfood.driven.core.exception.domain.product.mapper.ProductTypeMapper;
-import io.fiap.fastfood.driven.core.exception.domain.product.port.outbound.ProductPort;
 import io.fiap.fastfood.driven.repository.ProductRepository;
 import io.vavr.CheckedFunction1;
 import io.vavr.CheckedFunction2;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Optional;
 
 @Component
 public class ProductAdapter implements ProductPort {
@@ -29,7 +29,7 @@ public class ProductAdapter implements ProductPort {
 
     public ProductAdapter(ProductRepository productRepository,
                           ProductMapper mapper,
-                          ProductTypeMapper typeMapper, ObjectMapper objectMapper) {
+                          ObjectMapper objectMapper) {
         this.productRepository = productRepository;
         this.mapper = mapper;
         this.objectMapper = objectMapper;
@@ -38,7 +38,7 @@ public class ProductAdapter implements ProductPort {
     @Override
     public Mono<Product> createProduct(Product product) {
         return productRepository.save(mapper.entityFromDomain(product))
-            .map(mapper::domainFromEntity);
+                .map(mapper::domainFromEntity);
     }
 
     @Override
@@ -49,17 +49,17 @@ public class ProductAdapter implements ProductPort {
     @Override
     public Mono<Product> updateProduct(Long id, String operations) {
         return productRepository.findById(id)
-            .map(product -> applyPatch().unchecked().apply(product, operations))
-            .flatMap(productRepository::save)
-            .map(mapper::domainFromEntity)
-            .onErrorMap(JsonPatchException.class::isInstance, BadRequestException::new);
+                .map(product -> applyPatch().unchecked().apply(product, operations))
+                .flatMap(productRepository::save)
+                .map(mapper::domainFromEntity)
+                .onErrorMap(JsonPatchException.class::isInstance, BadRequestException::new);
     }
 
     private CheckedFunction2<ProductEntity, String, ProductEntity> applyPatch() {
         return (product, operations) -> {
             var patch = readOperations()
-                .unchecked()
-                .apply(operations);
+                    .unchecked()
+                    .apply(operations);
 
             var patched = patch.apply(objectMapper.convertValue(product, JsonNode.class));
 
@@ -77,9 +77,9 @@ public class ProductAdapter implements ProductPort {
     @Override
     public Flux<Product> listProduct(Long typeId, Pageable pageable) {
         return Flux.just(Optional.ofNullable(typeId))
-            .filter(Optional::isEmpty)
-            .flatMap(__ -> productRepository.findByIdNotNull(pageable))
-            .switchIfEmpty(Flux.defer(() -> productRepository.findByTypeId(typeId, pageable)))
-            .map(mapper::domainFromEntity);
+                .filter(Optional::isEmpty)
+                .flatMap(__ -> productRepository.findByIdNotNull(pageable))
+                .switchIfEmpty(Flux.defer(() -> productRepository.findByTypeId(typeId, pageable)))
+                .map(mapper::domainFromEntity);
     }
 }
