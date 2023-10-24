@@ -4,9 +4,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
-import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
 import io.fiap.fastfood.driven.core.domain.product.mapper.ProductMapper;
 import io.fiap.fastfood.driven.core.domain.product.port.inbound.ProductUseCase;
+import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
 import io.fiap.fastfood.driver.controller.product.dto.ProductDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

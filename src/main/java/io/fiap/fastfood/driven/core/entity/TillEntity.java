@@ -1,83 +1,52 @@
 package io.fiap.fastfood.driven.core.entity;
 
-import java.util.Objects;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document("caixa")
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class TillEntity { // CashDesk? BillingDay?
-    @Id
-    @Field("id_caixa")
-    private Long id;
 
     @Field("data_hora_abertura")
-    private String openAt;
+    private LocalDateTime openAt;
 
     @Field("data_hora_fechamento")
-    private String closedAt;
-
-    @Field("id_ponto_venda")
-    private String salesPointId;
+    private LocalDateTime closedAt;
 
     public TillEntity() {
     }
 
-    public TillEntity(Long id, String openAt, String closedAt, String salesPointId) {
-        this.id = id;
+    public TillEntity(LocalDateTime openAt, LocalDateTime closedAt) {
         this.openAt = openAt;
         this.closedAt = closedAt;
-        this.salesPointId = salesPointId;
     }
 
-    public TillEntity(String openAt, String closedAt, String salesPointId) {
-        this.openAt = openAt;
-        this.closedAt = closedAt;
-        this.salesPointId = salesPointId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOpenAt() {
+    public LocalDateTime getOpenAt() {
         return openAt;
     }
 
-    public void setOpenAt(String openAt) {
+    public void setOpenAt(LocalDateTime openAt) {
         this.openAt = openAt;
     }
 
-    public String getClosedAt() {
+    public LocalDateTime getClosedAt() {
         return closedAt;
     }
 
-    public void setClosedAt(String closedAt) {
+    public void setClosedAt(LocalDateTime closedAt) {
         this.closedAt = closedAt;
-    }
-
-    public String getSalesPointId() {
-        return salesPointId;
-    }
-
-    public void setSalesPointId(String salesPointId) {
-        this.salesPointId = salesPointId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TillEntity till = (TillEntity) o;
-        return Objects.equals(id, till.id) && Objects.equals(openAt, till.openAt) && Objects.equals(closedAt, till.closedAt) && Objects.equals(salesPointId, till.salesPointId);
+        TillEntity that = (TillEntity) o;
+        return Objects.equals(openAt, that.openAt) && Objects.equals(closedAt, that.closedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, openAt, closedAt, salesPointId);
+        return Objects.hash(openAt, closedAt);
     }
 }

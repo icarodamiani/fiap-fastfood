@@ -1,37 +1,43 @@
 package io.fiap.fastfood.driven.core.entity;
 
-import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.List;
+import java.util.Objects;
+
+
 @Document("ponto_venda")
 public class SalesPointEntity {
     @Id
-    @Field("id_ponto_venda")
-    private Long id;
+    private String id;
 
     @Field("descricao")
     private String description;
+
+    @Field("caixas")
+    private List<TillEntity> tills;
 
     public SalesPointEntity() {
         //default
     }
 
-    public SalesPointEntity(Long id, String description) {
+    public SalesPointEntity(String id, String description, List<TillEntity> tills) {
         this.id = id;
         this.description = description;
+        this.tills = tills;
     }
 
     public SalesPointEntity(String description) {
         this.description = description;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -41,6 +47,14 @@ public class SalesPointEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<TillEntity> getTills() {
+        return tills;
+    }
+
+    public void setTills(List<TillEntity> tills) {
+        this.tills = tills;
     }
 
     @Override
