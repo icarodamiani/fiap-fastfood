@@ -1,20 +1,22 @@
-package io.fiap.fastfood.driver.controller.order;
+package io.fiap.fastfood.driver.controller.order.tracking;
 
 import io.fiap.fastfood.driven.core.domain.order.tracking.mapper.OrderTrackingMapper;
 import io.fiap.fastfood.driven.core.domain.order.tracking.port.inbound.OrderTrackingUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driver.controller.order.dto.OrderTrackingDTO;
+import io.fiap.fastfood.driver.controller.order.tracking.dto.OrderTrackingDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -54,8 +56,8 @@ public class OrderTrackingController {
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @GetMapping
-    @Operation(description = "Find salespoint")
+    @GetMapping("/order")
+    @Operation(description = "Find order by id")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
@@ -64,6 +66,22 @@ public class OrderTrackingController {
     })
     public Mono<OrderTrackingDTO> find(@RequestParam String orderId) {
         return orderTrackingUseCase.find(orderId)
+                .map(orderTrackingMapper::dtoFromDomain)
+                .onErrorMap(e ->
+                        new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
+                .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
+    }
+
+    @GetMapping("/orders/open")
+    @Operation(description = "Find all orders with status not FINISHED")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+    })
+    public Flux<OrderTrackingDTO> findAllNotFinished(Pageable pageable) {
+        return orderTrackingUseCase.findAllNotFinished(pageable)
                 .map(orderTrackingMapper::dtoFromDomain)
                 .onErrorMap(e ->
                         new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
