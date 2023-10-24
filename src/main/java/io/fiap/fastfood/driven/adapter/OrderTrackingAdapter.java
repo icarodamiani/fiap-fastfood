@@ -29,7 +29,7 @@ public class OrderTrackingAdapter implements OrderTrackingPort {
     @Override
     public Mono<OrderTracking> findOrderTracking(String orderId) {
         return orderTrackingRepository.findByOrderIdOrderByOrderDateTime(orderId)
-                .single()
+                .last()
                 .map(orderTrackingMapper::domainFromEntity)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(NotFoundException::new)));
     }
