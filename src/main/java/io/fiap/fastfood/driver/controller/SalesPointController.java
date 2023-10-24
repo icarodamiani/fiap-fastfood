@@ -24,7 +24,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RestController
 @RequestMapping(value = "/v1/salespoint", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SalesPointController {
-    private static final Logger LOGGER = getLogger(io.fiap.fastfood.driver.controller.SalesPointController.class);
+    private static final Logger LOGGER = getLogger(SalesPointController.class);
     private final SalesPointMapper mapper;
     private final SalesPointUseCase salesPointUseCase;
     private final HttpStatusExceptionConverter httpStatusExceptionConverter;
