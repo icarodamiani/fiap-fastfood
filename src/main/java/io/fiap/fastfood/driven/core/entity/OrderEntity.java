@@ -1,98 +1,94 @@
 package io.fiap.fastfood.driven.core.entity;
 
-import java.util.Objects;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import io.fiap.fastfood.driven.core.exception.domain.model.OrderStatus;
+
 @Document("pedido")
-public class OrderEntity {
+public record OrderEntity(
     @Id
     @Field("id_pedido")
-    private Long id;
+    Long id,
     @Field("id_cliente")
-    private String customerId;
-
+    CustomerEntity customerId,
+    @Field("lista_item_pedido")
+    List<OrderItemEntity> orderItemList,
     @Field("id_pagamento")
-    private String paymentId; // accountId?
+    PaymentEntity paymentId,
     @Field("id_ponto_venda")
-    private String salesPointId;
+    SalesPointEntity salesPointId,
     @Field("data_hora")
-    private String createdAt;
+    Date createdAt,
     @Field("numero_pedido")
-    private String number;
+    Long number,
+    @Field("id_status_pedido")
+    OrderStatusEntity orderStatusId) {
 
-    public OrderEntity() {
-        //default
-    }
+        public static final class OrderEntityBuilder {
+            private Long id;
+            private CustomerEntity customerId;
+            private List<OrderItemEntity> orderItemList;
+            private PaymentEntity paymentId;
+            private SalesPointEntity salesPointId;
+            private Date createdAt;
+            private Long number;
+            private OrderStatusEntity orderStatusId;
+    
+            private OrderEntityBuilder() {
+            }
+    
+            public static OrderEntityBuilder builder() {
+                return new OrderEntityBuilder();
+            }
+    
+            public OrderEntityBuilder withId(Long id) {
+                this.id = id;
+                return this;
+            }
+    
+            public OrderEntityBuilder withCustomerId(CustomerEntity customerId) {
+                this.customerId = customerId;
+                return this;
+            }
 
-    public OrderEntity(String customerId, String salesPointId, String createdAt, String number) {
-        this.customerId = customerId;
-        this.salesPointId = salesPointId;
-        this.createdAt = createdAt;
-        this.number = number;
-    }
+            public OrderEntityBuilder withOrderItemList(List<OrderItemEntity> orderItemList) {
+                this.orderItemList = orderItemList;
+                return this;
+            }
 
-    public OrderEntity(Long id, String customerId, String salesPointId, String createdAt, String number) {
-        this.id = id;
-        this.customerId = customerId;
-        this.salesPointId = salesPointId;
-        this.createdAt = createdAt;
-        this.number = number;
-    }
+            public OrderEntityBuilder withPaymentId(PaymentEntity paymentId) {
+                this.paymentId = paymentId;
+                return this;
+            }
+    
+            public OrderEntityBuilder withSalesPointId(SalesPointEntity salesPointId) {
+                this.salesPointId = salesPointId;
+                return this;
+            }
+    
+            public OrderEntityBuilder withCreatedAt(Date createdAt) {
+                this.createdAt = createdAt;
+                return this;
+            }
 
-    public Long getId() {
-        return id;
-    }
+            public OrderEntityBuilder withNumber(Long number) {
+                this.number = number;
+                return this;
+            }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+            public OrderEntityBuilder withOrderStatusId(OrderStatusEntity orderStatusId) {
+                this.orderStatusId = orderStatusId;
+                return this;
+            }
+       
+            public OrderEntity build() {
+                return new OrderEntity(id, customerId, orderItemList, paymentId, salesPointId, createdAt, number, orderStatusId);
+            }
+        }
 
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getSalesPointId() {
-        return salesPointId;
-    }
-
-    public void setSalesPointId(String salesPointId) {
-        this.salesPointId = salesPointId;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderEntity order = (OrderEntity) o;
-        return Objects.equals(id, order.id) && Objects.equals(customerId, order.customerId)
-            && Objects.equals(salesPointId, order.salesPointId) && Objects.equals(createdAt, order.createdAt)
-            && Objects.equals(number, order.number);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, customerId, salesPointId, createdAt, number);
-    }
 }
