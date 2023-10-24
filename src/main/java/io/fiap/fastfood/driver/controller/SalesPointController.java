@@ -3,7 +3,7 @@ package io.fiap.fastfood.driver.controller;
 import io.fiap.fastfood.driven.core.domain.salespoint.mapper.SalesPointMapper;
 import io.fiap.fastfood.driven.core.domain.salespoint.port.inbound.SalesPointUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
+import io.fiap.fastfood.driver.controller.product.dto.SalesPointDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

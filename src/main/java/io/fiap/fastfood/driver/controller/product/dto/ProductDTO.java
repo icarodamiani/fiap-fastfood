@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driver.controller.dto;
+package io.fiap.fastfood.driver.controller.product.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

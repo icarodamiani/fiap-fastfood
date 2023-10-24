@@ -6,16 +6,15 @@ import io.fiap.fastfood.driven.core.domain.salespoint.port.outbound.SalesPointPo
 import io.fiap.fastfood.driven.core.entity.SalesPointEntity;
 import io.fiap.fastfood.driven.core.exception.BadRequestException;
 import io.fiap.fastfood.driven.repository.SalesPointRepository;
-import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
+import io.fiap.fastfood.driver.controller.product.dto.SalesPointDTO;
+import java.time.ZonedDateTime;
+import java.util.Optional;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.ZonedDateTime;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Component
 public class SalesPointAdapter implements SalesPointPort {
@@ -32,24 +31,24 @@ public class SalesPointAdapter implements SalesPointPort {
     @Override
     public Mono<SalesPoint> createSalesPoint(SalesPoint salesPoint) {
         return salesPointRepository.save(mapper.entityFromDomain(salesPoint))
-                .map(mapper::domainFromEntity);
+            .map(mapper::domainFromEntity);
     }
 
     @Override
     public Flux<SalesPoint> findSalesPoint(String id, Pageable pageable) {
         return Flux.just(Optional.ofNullable(id))
-                .filter(Optional::isEmpty)
-                .flatMap(__ -> salesPointRepository.findByIdNotNull(pageable))
-                .switchIfEmpty(Flux.defer(() -> salesPointRepository.findById(id, pageable)))
-                .map(mapper::domainFromEntity);
+            .filter(Optional::isEmpty)
+            .flatMap(__ -> salesPointRepository.findByIdNotNull(pageable))
+            .switchIfEmpty(Flux.defer(() -> salesPointRepository.findById(id, pageable)))
+            .map(mapper::domainFromEntity);
     }
 
     @Override
     public Mono<SalesPoint> updateSalesPoint(String id, SalesPointDTO salesPointDTO) {
         return salesPointRepository.findById(id)
-                .map(salesPointEntity -> updateEntity(salesPointEntity, salesPointDTO))
-                .flatMap(salesPointRepository::save)
-                .map(mapper::domainFromEntity);
+            .map(salesPointEntity -> updateEntity(salesPointEntity, salesPointDTO))
+            .flatMap(salesPointRepository::save)
+            .map(mapper::domainFromEntity);
     }
 
     private static SalesPointEntity updateEntity(SalesPointEntity salesPointEntity, SalesPointDTO salesPointDTO) {
@@ -63,17 +62,17 @@ public class SalesPointAdapter implements SalesPointPort {
         }
 
         IntStream.range(0, salesPointEntity.getTills().size())
-                .forEach(index -> {
-                    if (ObjectUtils.isNotEmpty(salesPointDTO.tills().get(index).openAt())) {
-                        salesPointEntity.getTills().get(index).setOpenAt(
-                                ZonedDateTime.parse(salesPointDTO.tills().get(index).openAt()).toLocalDateTime());
-                    }
+            .forEach(index -> {
+                if (ObjectUtils.isNotEmpty(salesPointDTO.tills().get(index).openAt())) {
+                    salesPointEntity.getTills().get(index).setOpenAt(
+                        ZonedDateTime.parse(salesPointDTO.tills().get(index).openAt()).toLocalDateTime());
+                }
 
-                    if (ObjectUtils.isNotEmpty(salesPointDTO.tills().get(index).closedAt())) {
-                        salesPointEntity.getTills().get(index).setClosedAt(ZonedDateTime
-                                .parse(salesPointDTO.tills().get(index).closedAt()).toLocalDateTime());
-                    }
-                });
+                if (ObjectUtils.isNotEmpty(salesPointDTO.tills().get(index).closedAt())) {
+                    salesPointEntity.getTills().get(index).setClosedAt(ZonedDateTime
+                        .parse(salesPointDTO.tills().get(index).closedAt()).toLocalDateTime());
+                }
+            });
 
 
         return salesPointEntity;
