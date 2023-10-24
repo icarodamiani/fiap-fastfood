@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driver.controller.dto;
+package io.fiap.fastfood.driver.controller.order.dto;
 
 public enum OrderTrackingStatusTypeDTO {
     WAITING_PAYMENT,

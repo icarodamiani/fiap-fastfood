@@ -1,9 +1,9 @@
-package io.fiap.fastfood.driver.controller;
+package io.fiap.fastfood.driver.controller.order;
 
 import io.fiap.fastfood.driven.core.domain.order.tracking.mapper.OrderTrackingMapper;
 import io.fiap.fastfood.driven.core.domain.order.tracking.port.inbound.OrderTrackingUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driver.controller.dto.OrderTrackingDTO;
+import io.fiap.fastfood.driver.controller.order.dto.OrderTrackingDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

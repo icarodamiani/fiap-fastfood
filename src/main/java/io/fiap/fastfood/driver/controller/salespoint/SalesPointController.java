@@ -1,9 +1,9 @@
-package io.fiap.fastfood.driver.controller;
+package io.fiap.fastfood.driver.controller.salespoint;
 
-import io.fiap.fastfood.driven.core.domain.product.mapper.ProductMapper;
-import io.fiap.fastfood.driven.core.domain.product.port.inbound.ProductUseCase;
+import io.fiap.fastfood.driven.core.domain.salespoint.mapper.SalesPointMapper;
+import io.fiap.fastfood.driven.core.domain.salespoint.port.inbound.SalesPointUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driver.controller.dto.ProductDTO;
+import io.fiap.fastfood.driver.controller.salespoint.dto.SalesPointDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,56 +20,51 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
-@RequestMapping(value = "/v1/products", produces = APPLICATION_JSON_VALUE)
-public class ProductController {
-
-    private static final Logger LOGGER = getLogger(ProductController.class);
-
-    private final ProductMapper mapper;
-    private final ProductUseCase productUseCase;
-
+@RequestMapping(value = "/v1/salespoint", produces = MediaType.APPLICATION_JSON_VALUE)
+public class SalesPointController {
+    private static final Logger LOGGER = getLogger(SalesPointController.class);
+    private final SalesPointMapper mapper;
+    private final SalesPointUseCase salesPointUseCase;
     private final HttpStatusExceptionConverter httpStatusExceptionConverter;
 
-    public ProductController(ProductMapper mapper,
-                             ProductUseCase productUseCase,
-                             HttpStatusExceptionConverter httpStatusExceptionConverter) {
+    public SalesPointController(SalesPointMapper mapper,
+                                SalesPointUseCase salesPointUseCase,
+                                HttpStatusExceptionConverter httpStatusExceptionConverter) {
         this.mapper = mapper;
-        this.productUseCase = productUseCase;
+        this.salesPointUseCase = salesPointUseCase;
         this.httpStatusExceptionConverter = httpStatusExceptionConverter;
     }
 
     @PostMapping
-    @Operation(description = "Create a product")
+    @Operation(description = "Create a salespoint")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Added"),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "409", description = "Duplicated", content = @Content)
     })
-    public Mono<ResponseEntity<ProductDTO>> create(@Validated @RequestBody ProductDTO value) {
-        return productUseCase.create(mapper.domainFromDto(value))
+    public Mono<ResponseEntity<SalesPointDTO>> create(@Validated @RequestBody SalesPointDTO body) {
+        return salesPointUseCase.create(mapper.domainFromDto(body))
                 .map(mapper::dtoFromDomain)
-                .map(v -> ResponseEntity.status(HttpStatus.CREATED).body(v))
+                .map(b -> ResponseEntity.status(HttpStatus.CREATED).body(b))
                 .onErrorMap(e ->
                         new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
     @PatchMapping(value = "/{id}", consumes = "application/json-patch+json")
-    @Operation(description = "Update a product")
+    @Operation(description = "Update a salespoint")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Updated"),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<ProductDTO>> update(@PathVariable Long id,
-                                                   @RequestBody String operations) {
-        return productUseCase.update(id, operations)
+    public Mono<ResponseEntity<SalesPointDTO>> update(@PathVariable String id,
+                                                      @RequestBody SalesPointDTO body) {
+        return salesPointUseCase.update(id, body)
                 .map(mapper::dtoFromDomain)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build())
@@ -78,15 +74,15 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(description = "Delete a product")
+    @Operation(description = "Delete a salespoint")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Deleted."),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
-        return productUseCase.delete(id)
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
+        return salesPointUseCase.delete(id)
                 .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
                 .defaultIfEmpty(ResponseEntity.noContent().build())
                 .onErrorMap(e ->
@@ -94,16 +90,16 @@ public class ProductController {
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @GetMapping(produces = TEXT_EVENT_STREAM_VALUE)
-    @Operation(description = "List products")
+    @GetMapping
+    @Operation(description = "Find salespoint")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Flux<ProductDTO> find(@RequestParam(required = false) Long typeId, Pageable pageable) {
-        return productUseCase.list(typeId, pageable)
+    public Flux<SalesPointDTO> find(@RequestParam(required = false) String id, Pageable pageable) {
+        return salesPointUseCase.find(id, pageable)
                 .map(mapper::dtoFromDomain)
                 .onErrorMap(e ->
                         new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))

@@ -1,7 +1,7 @@
 package io.fiap.fastfood.driven.core.domain.salespoint.port.inbound;
 
 import io.fiap.fastfood.driven.core.domain.model.SalesPoint;
-import io.fiap.fastfood.driver.controller.dto.SalesPointDTO;
+import io.fiap.fastfood.driver.controller.salespoint.dto.SalesPointDTO;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

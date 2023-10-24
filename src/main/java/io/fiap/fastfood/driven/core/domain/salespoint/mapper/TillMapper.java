@@ -2,14 +2,13 @@ package io.fiap.fastfood.driven.core.domain.salespoint.mapper;
 
 import io.fiap.fastfood.driven.core.domain.model.Till;
 import io.fiap.fastfood.driven.core.entity.TillEntity;
-import io.fiap.fastfood.driver.controller.dto.TillDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
+import io.fiap.fastfood.driver.controller.salespoint.dto.TillDTO;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface TillMapper {

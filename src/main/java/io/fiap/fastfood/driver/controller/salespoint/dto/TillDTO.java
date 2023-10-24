@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driver.controller.dto;
+package io.fiap.fastfood.driver.controller.salespoint.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
