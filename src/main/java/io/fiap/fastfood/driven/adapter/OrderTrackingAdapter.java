@@ -16,7 +16,7 @@ public class OrderTrackingAdapter implements OrderTrackingPort {
     private final OrderTrackingRepository orderTrackingRepository;
     private final OrderTrackingMapper orderTrackingMapper;
 
-    private final static String FINISHED_STATUS = "FINISHED";
+    private static final String FINISHED_STATUS = "FINISHED";
 
     public OrderTrackingAdapter(OrderTrackingRepository orderTrackingRepository,
                                 OrderTrackingMapper orderTrackingMapper) {
@@ -27,21 +27,21 @@ public class OrderTrackingAdapter implements OrderTrackingPort {
     @Override
     public Mono<OrderTracking> createOrderTracking(OrderTracking orderTracking) {
         return orderTrackingRepository.save(orderTrackingMapper.entityFromDomain(orderTracking))
-                .map(orderTrackingMapper::domainFromEntity);
+            .map(orderTrackingMapper::domainFromEntity);
     }
 
     @Override
     public Mono<OrderTracking> findOrderTracking(String orderId) {
         return orderTrackingRepository.findByOrderIdOrderByOrderDateTime(orderId)
-                .last()
-                .map(orderTrackingMapper::domainFromEntity)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(NotFoundException::new)));
+            .last()
+            .map(orderTrackingMapper::domainFromEntity)
+            .switchIfEmpty(Mono.defer(() -> Mono.error(NotFoundException::new)));
     }
 
     @Override
     public Flux<OrderTracking> findAllOrdersNotFinished(Pageable pageable) {
         return orderTrackingRepository.findByOrderStatusNot(FINISHED_STATUS, pageable)
-                .map(orderTrackingMapper::domainFromEntity)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(NotFoundException::new)));
+            .map(orderTrackingMapper::domainFromEntity)
+            .switchIfEmpty(Mono.defer(() -> Mono.error(NotFoundException::new)));
     }
 }
