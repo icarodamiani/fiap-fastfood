@@ -2,7 +2,7 @@ package io.fiap.fastfood.driven.core.domain.order.tracking.mapper;
 
 import io.fiap.fastfood.driven.core.domain.model.OrderTracking;
 import io.fiap.fastfood.driven.core.entity.OrderTrackingEntity;
-import io.fiap.fastfood.driver.controller.order.tracking.dto.OrderTrackingDTO;
+import io.fiap.fastfood.driver.controller.tracking.dto.OrderTrackingDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

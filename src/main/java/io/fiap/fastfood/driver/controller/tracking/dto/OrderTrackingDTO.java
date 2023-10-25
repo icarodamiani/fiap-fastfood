@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driver.controller.order.tracking.dto;
+package io.fiap.fastfood.driver.controller.tracking.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;

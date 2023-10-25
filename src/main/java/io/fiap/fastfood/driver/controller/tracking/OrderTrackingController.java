@@ -1,9 +1,11 @@
-package io.fiap.fastfood.driver.controller.order.tracking;
+package io.fiap.fastfood.driver.controller.tracking;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 import io.fiap.fastfood.driven.core.domain.order.tracking.mapper.OrderTrackingMapper;
 import io.fiap.fastfood.driven.core.domain.order.tracking.port.inbound.OrderTrackingUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driver.controller.order.tracking.dto.OrderTrackingDTO;
+import io.fiap.fastfood.driver.controller.tracking.dto.OrderTrackingDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,12 +16,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
 @RequestMapping(value = "/v1/order-tracking", produces = MediaType.APPLICATION_JSON_VALUE)

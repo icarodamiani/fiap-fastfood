@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driver.controller.order.tracking.dto;
+package io.fiap.fastfood.driver.controller.tracking.dto;
 
 public enum OrderTrackingRoleTypeDTO {
     CLIENT,
