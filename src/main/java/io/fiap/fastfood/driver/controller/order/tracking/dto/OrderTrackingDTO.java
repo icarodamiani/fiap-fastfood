@@ -1,11 +1,13 @@
 package io.fiap.fastfood.driver.controller.order.tracking.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record OrderTrackingDTO(
 
         @Schema(accessMode = Schema.AccessMode.READ_ONLY)
@@ -24,36 +26,8 @@ public record OrderTrackingDTO(
         OrderTrackingRoleTypeDTO role,
         @Schema(accessMode = Schema.AccessMode.READ_ONLY)
         @JsonFormat(pattern = "yyyy-M-d'T'HH:mm:ss.yyyy'Z'")
-        LocalDateTime orderDateTime
+        LocalDateTime orderDateTime,
+
+        Long orderTimeSpent
 ) {
-
-    @Override
-    public String id() {
-        return id;
-    }
-
-    @Override
-    public String orderId() {
-        return orderId;
-    }
-
-    @Override
-    public String orderNumber() {
-        return orderNumber;
-    }
-
-    @Override
-    public OrderTrackingStatusTypeDTO orderStatus() {
-        return orderStatus;
-    }
-
-    @Override
-    public OrderTrackingRoleTypeDTO role() {
-        return role;
-    }
-
-    @Override
-    public LocalDateTime orderDateTime() {
-        return orderDateTime;
-    }
 }

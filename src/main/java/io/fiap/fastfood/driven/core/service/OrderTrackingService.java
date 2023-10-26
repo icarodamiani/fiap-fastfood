@@ -31,8 +31,8 @@ public class OrderTrackingService implements OrderTrackingUseCase {
     / Find all orders with status not FINISHED
      */
     @Override
-    public Flux<OrderTracking> findAllNotFinished(Pageable pageable) {
-        return orderTrackingPort.findAllOrdersNotFinished(pageable);
+    public Flux<OrderTracking> findAll(Pageable pageable) {
+        return orderTrackingPort.findAllOrders(pageable);
     }
 
 }

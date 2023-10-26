@@ -23,36 +23,66 @@ public record OrderTrackingEntity(
         String role,
 
         @Field("data_hora")
-        LocalDateTime orderDateTime
+        LocalDateTime orderDateTime,
+
+        Long orderTimeSpent
 ) {
 
-    @Override
-    public String id() {
-        return id;
-    }
 
-    @Override
-    public String orderId() {
-        return orderId;
-    }
+    public static final class OrderTrackingEntityBuilder {
+        private String id;
+        private String orderId;
+        private String orderNumber;
+        private String orderStatus;
+        private String role;
+        private LocalDateTime orderDateTime;
+        private Long orderTimeSpent;
 
-    @Override
-    public String orderNumber() {
-        return orderNumber;
-    }
+        private OrderTrackingEntityBuilder() {
+        }
 
-    @Override
-    public String orderStatus() {
-        return orderStatus;
-    }
+        public static OrderTrackingEntityBuilder builder() {
+            return new OrderTrackingEntityBuilder();
+        }
 
-    @Override
-    public String role() {
-        return role;
-    }
+        public OrderTrackingEntityBuilder withId(String id) {
+            this.id = id;
+            return this;
+        }
 
-    @Override
-    public LocalDateTime orderDateTime() {
-        return orderDateTime;
+        public OrderTrackingEntityBuilder withOrderId(String orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+
+        public OrderTrackingEntityBuilder withOrderNumber(String orderNumber) {
+            this.orderNumber = orderNumber;
+            return this;
+        }
+
+        public OrderTrackingEntityBuilder withOrderStatus(String orderStatus) {
+            this.orderStatus = orderStatus;
+            return this;
+        }
+
+        public OrderTrackingEntityBuilder withRole(String role) {
+            this.role = role;
+            return this;
+        }
+
+        public OrderTrackingEntityBuilder withOrderDateTime(LocalDateTime orderDateTime) {
+            this.orderDateTime = orderDateTime;
+            return this;
+        }
+
+        public OrderTrackingEntityBuilder withOrderTimeSpent(Long orderTimeSpent) {
+            this.orderTimeSpent = orderTimeSpent;
+            return this;
+        }
+
+        public OrderTrackingEntity build() {
+            return new OrderTrackingEntity(id, orderId, orderNumber, orderStatus, role,
+                    orderDateTime, orderTimeSpent);
+        }
     }
 }

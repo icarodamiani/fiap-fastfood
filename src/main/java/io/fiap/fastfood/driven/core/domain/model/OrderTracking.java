@@ -8,36 +8,9 @@ public record OrderTracking(
         String orderNumber,
         String orderStatus,
         String role,
-        LocalDateTime orderDateTime
+        LocalDateTime orderDateTime,
+
+        Long orderTimeSpent
 
 ) {
-    @Override
-    public String id() {
-        return id;
-    }
-
-    @Override
-    public String orderId() {
-        return orderId;
-    }
-
-    @Override
-    public String orderNumber() {
-        return orderNumber;
-    }
-
-    @Override
-    public String orderStatus() {
-        return orderStatus;
-    }
-
-    @Override
-    public String role() {
-        return role;
-    }
-
-    @Override
-    public LocalDateTime orderDateTime() {
-        return orderDateTime;
-    }
 }

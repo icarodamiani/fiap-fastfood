@@ -10,6 +10,6 @@ public interface OrderTrackingUseCase {
 
     Mono<OrderTracking> find(String orderId);
 
-    Flux<OrderTracking> findAllNotFinished(Pageable pageable);
+    Flux<OrderTracking> findAll(Pageable pageable);
 
 }

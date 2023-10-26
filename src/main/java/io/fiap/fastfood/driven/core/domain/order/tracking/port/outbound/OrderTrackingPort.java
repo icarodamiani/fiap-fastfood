@@ -10,6 +10,6 @@ public interface OrderTrackingPort {
 
     Mono<OrderTracking> findOrderTracking(String orderId);
 
-    Flux<OrderTracking> findAllOrdersNotFinished(Pageable pageable);
+    Flux<OrderTracking> findAllOrders(Pageable pageable);
 
 }
