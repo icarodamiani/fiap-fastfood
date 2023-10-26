@@ -42,12 +42,12 @@ public class ProductAdapter implements ProductPort {
     }
 
     @Override
-    public Mono<Void> deleteProduct(Long id) {
+    public Mono<Void> deleteProduct(String id) {
         return productRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Product> updateProduct(Long id, String operations) {
+    public Mono<Product> updateProduct(String id, String operations) {
         return productRepository.findById(id)
                 .map(product -> applyPatch().unchecked().apply(product, operations))
                 .flatMap(productRepository::save)
@@ -75,7 +75,7 @@ public class ProductAdapter implements ProductPort {
     }
 
     @Override
-    public Flux<Product> listProduct(Long typeId, Pageable pageable) {
+    public Flux<Product> listProduct(String typeId, Pageable pageable) {
         return Flux.just(Optional.ofNullable(typeId))
                 .filter(Optional::isEmpty)
                 .flatMap(__ -> productRepository.findByIdNotNull(pageable))

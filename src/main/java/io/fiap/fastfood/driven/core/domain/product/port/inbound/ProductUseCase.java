@@ -8,9 +8,9 @@ import reactor.core.publisher.Mono;
 public interface ProductUseCase {
     Mono<Product> create(Product value);
 
-    Flux<Product> list(Long typeId, Pageable pageable);
+    Flux<Product> list(String typeId, Pageable pageable);
 
-    Mono<Void> delete(Long id);
+    Mono<Void> delete(String id);
 
-    Mono<Product> update(Long id, String operations);
+    Mono<Product> update(String id, String operations);
 }

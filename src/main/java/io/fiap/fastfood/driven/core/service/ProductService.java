@@ -27,19 +27,19 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Flux<Product> list(Long typeId, Pageable pageable) {
+    public Flux<Product> list(String typeId, Pageable pageable) {
         return productPort.listProduct(typeId, pageable);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         return Mono.just(id)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
                 .flatMap(productPort::deleteProduct);
     }
 
     @Override
-    public Mono<Product> update(Long id, String operations) {
+    public Mono<Product> update(String id, String operations) {
         return productPort.updateProduct(id, operations);
     }
 

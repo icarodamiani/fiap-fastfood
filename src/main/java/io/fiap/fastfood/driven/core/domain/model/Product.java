@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 public record Product(
-    Long id,
-    Long typeId,
+    String id,
+    String typeId,
     String description,
     BigDecimal price,
     Integer availability,
     ProductType type) {
 
-    Optional<Long> getId() {
+    Optional<String> getId() {
         return Optional.ofNullable(id());
     }
 
@@ -21,8 +21,8 @@ public record Product(
 
 
     public static final class ProductBuilder {
-        private Long id;
-        private Long typeId;
+        private String id;
+        private String typeId;
         private String description;
         private BigDecimal price;
         private Integer availability;
@@ -35,12 +35,12 @@ public record Product(
             return new ProductBuilder();
         }
 
-        public ProductBuilder withId(Long id) {
+        public ProductBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public ProductBuilder withTypeId(Long typeId) {
+        public ProductBuilder withTypeId(String typeId) {
             this.typeId = typeId;
             return this;
         }

@@ -1,7 +1,7 @@
 package io.fiap.fastfood.driven.core.domain.model;
 
 public record Customer(
-    Long id,
+    String id,
     String name,
     Identity identity,
     String email,
@@ -9,7 +9,7 @@ public record Customer(
 
 
     public static final class CustomerBuilder {
-        private Long id;
+        private String id;
         private String name;
         private Identity identity;
         private String email;
@@ -22,7 +22,7 @@ public record Customer(
             return new CustomerBuilder();
         }
 
-        public CustomerBuilder withId(Long id) {
+        public CustomerBuilder withId(String id) {
             this.id = id;
             return this;
         }

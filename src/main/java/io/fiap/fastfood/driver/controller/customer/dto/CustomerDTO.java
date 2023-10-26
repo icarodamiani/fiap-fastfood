@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
 public record CustomerDTO(
-    @Nullable Long id,
+    @Nullable String id,
     @NotNull String name,
     @NotNull IdentityDTO identity,
     @NotNull String email,
     @Nullable String number) {
 
-    Optional<Long> getId() {
+    Optional<String> getId() {
         return Optional.ofNullable(id());
     }
 
@@ -21,7 +21,7 @@ public record CustomerDTO(
 
 
     public static final class CustomerDTOBuilder {
-        private Long id;
+        private String id;
         private @NotNull String name;
         private @NotNull IdentityDTO identity;
         private @NotNull String email;
@@ -34,7 +34,7 @@ public record CustomerDTO(
             return new CustomerDTOBuilder();
         }
 
-        public CustomerDTOBuilder withId(Long id) {
+        public CustomerDTOBuilder withId(String id) {
             this.id = id;
             return this;
         }

@@ -45,12 +45,12 @@ public class CustomerAdapter implements CustomerPort {
     }
 
     @Override
-    public Mono<Void> deleteCustomer(Long id) {
+    public Mono<Void> deleteCustomer(String id) {
         return customerRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Customer> updateCustomer(Long id, String operations) {
+    public Mono<Customer> updateCustomer(String id, String operations) {
         return customerRepository.findById(id)
             .map(customer -> applyPatch().unchecked().apply(customer, operations))
             .flatMap(customerRepository::save)

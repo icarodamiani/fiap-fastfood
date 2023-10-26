@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerPort {
     Mono<Customer> createCustomer(Customer product);
-    Mono<Customer> updateCustomer(Long id, String operations);
-    Mono<Void> deleteCustomer(Long id);
+    Mono<Customer> updateCustomer(String id, String operations);
+    Mono<Void> deleteCustomer(String id);
     Flux<Customer> listCustomer(Pageable pageable);
 }
