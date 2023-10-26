@@ -9,9 +9,9 @@ public interface ProductPort {
 
     Mono<Product> createProduct(Product product);
 
-    Mono<Product> updateProduct(Long id, String operations);
+    Mono<Product> updateProduct(String id, String operations);
 
-    Mono<Void> deleteProduct(Long id);
+    Mono<Void> deleteProduct(String id);
 
-    Flux<Product> listProduct(Long typeId, Pageable pageable);
+    Flux<Product> listProduct(String typeId, Pageable pageable);
 }

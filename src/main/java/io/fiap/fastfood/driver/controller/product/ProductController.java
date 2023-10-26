@@ -75,7 +75,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<ProductDTO>> update(@PathVariable Long id,
+    public Mono<ResponseEntity<ProductDTO>> update(@PathVariable String id,
                                                    @RequestBody String operations) {
         return productUseCase.update(id, operations)
             .map(mapper::dtoFromDomain)
@@ -94,7 +94,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
         return productUseCase.delete(id)
             .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
             .defaultIfEmpty(ResponseEntity.noContent().build())
@@ -111,7 +111,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Flux<ProductDTO> find(@RequestParam(required = false) Long typeId, Pageable pageable) {
+    public Flux<ProductDTO> find(@RequestParam(required = false) String typeId, Pageable pageable) {
         return productUseCase.list(typeId, pageable)
             .map(mapper::dtoFromDomain)
             .onErrorMap(e ->

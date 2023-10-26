@@ -72,7 +72,7 @@ public class CustomerController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<CustomerDTO>> update(@PathVariable Long id,
+    public Mono<ResponseEntity<CustomerDTO>> update(@PathVariable String id,
                                                     @RequestBody String operations) {
         return customerUseCase.update(id, operations)
             .map(mapper::dtoFromDomain)
@@ -91,7 +91,7 @@ public class CustomerController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
         return customerUseCase.delete(id)
             .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
             .defaultIfEmpty(ResponseEntity.noContent().build())

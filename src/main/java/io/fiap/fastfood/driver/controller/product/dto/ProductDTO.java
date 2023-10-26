@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import reactor.util.annotation.Nullable;
 
-public record ProductDTO(Long id,
-                         @NotNull Long typeId,
+public record ProductDTO(String id,
+                         @NotNull String typeId,
                          @NotNull @Size(min = 2, max = 50) String description,
                          @NotNull @Min(0) BigDecimal price,
                          @NotNull @Min(0) Integer availability,
                          @Nullable ProductTypeDTO type) {
 
-    Optional<Long> getId() {
+    Optional<String> getId() {
         return Optional.ofNullable(id());
     }
 
@@ -24,8 +24,8 @@ public record ProductDTO(Long id,
 
 
     public static final class ProductDTOBuilder {
-        private Long id;
-        private @NotNull Long typeId;
+        private String id;
+        private @NotNull String typeId;
         private @NotNull @Size(min = 2, max = 50) String description;
         private @NotNull @Min(0) BigDecimal price;
         private @NotNull @Min(0) Integer availability;
@@ -38,12 +38,12 @@ public record ProductDTO(Long id,
             return new ProductDTOBuilder();
         }
 
-        public ProductDTOBuilder withId(Long id) {
+        public ProductDTOBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public ProductDTOBuilder withTypeId(Long typeId) {
+        public ProductDTOBuilder withTypeId(String typeId) {
             this.typeId = typeId;
             return this;
         }

@@ -8,10 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("produto")
 public record ProductEntity(
     @Id
-    @Field("id_produto")
-    Long id,
+    String id,
     @Field("id_categoria")
-    Long typeId,
+    String typeId,
     @Field("descricao")
     String description,
     @Field("preco")
@@ -23,8 +22,8 @@ public record ProductEntity(
 
 
     public static final class ProductEntityBuilder {
-        private Long id;
-        private Long typeId;
+        private String id;
+        private String typeId;
         private String description;
         private BigDecimal price;
         private Integer availability;
@@ -37,12 +36,12 @@ public record ProductEntity(
             return new ProductEntityBuilder();
         }
 
-        public ProductEntityBuilder withId(Long id) {
+        public ProductEntityBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public ProductEntityBuilder withTypeId(Long typeId) {
+        public ProductEntityBuilder withTypeId(String typeId) {
             this.typeId = typeId;
             return this;
         }

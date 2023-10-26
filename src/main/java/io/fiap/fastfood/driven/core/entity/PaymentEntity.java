@@ -1,98 +1,66 @@
 package io.fiap.fastfood.driven.core.entity;
 
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document("pedido")
-public class PaymentEntity {
+@Document("pagamento")
+public record PaymentEntity(
     @Id
-    @Field("id_pedido")
-    private Long id;
-    @Field("id_cliente")
-    private String customerId;
-
-    @Field("id_pagamento")
-    private String paymentId; // accountId?
-    @Field("id_ponto_venda")
-    private String salesPointId;
+    String id,
+    @Field("meio_pagamento")
+    String method,
+    @Field("valor")
+    BigDecimal amount,
     @Field("data_hora")
-    private String createdAt;
-    @Field("numero_pedido")
-    private String number;
+    LocalDateTime dateTime,
+    @Field("id_pedido")
+    Long orderId) {
 
-    public PaymentEntity() {
-        //default
+    public static final class PaymentEntityBuilder {
+        private String id;
+        private String method;
+        private BigDecimal amount;
+        private LocalDateTime dateTime;
+        private Long orderId;
+
+        private PaymentEntityBuilder() {
+        }
+
+        public static PaymentEntityBuilder builder() {
+            return new PaymentEntityBuilder();
+        }
+
+        public PaymentEntityBuilder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public PaymentEntityBuilder withMethod(String method) {
+            this.method = method;
+            return this;
+        }
+
+        public PaymentEntityBuilder withAmount(BigDecimal amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public PaymentEntityBuilder withDateTime(LocalDateTime dateTime) {
+            this.dateTime = dateTime;
+            return this;
+        }
+
+        public PaymentEntityBuilder withOrderId(Long orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+
+        public PaymentEntity build() {
+            return new PaymentEntity(id, method, amount, dateTime, orderId);
+        }
     }
 
-    public PaymentEntity(String customerId, String salesPointId, String createdAt, String number) {
-        this.customerId = customerId;
-        this.salesPointId = salesPointId;
-        this.createdAt = createdAt;
-        this.number = number;
-    }
-
-    public PaymentEntity(Long id, String customerId, String salesPointId, String createdAt, String number) {
-        this.id = id;
-        this.customerId = customerId;
-        this.salesPointId = salesPointId;
-        this.createdAt = createdAt;
-        this.number = number;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getSalesPointId() {
-        return salesPointId;
-    }
-
-    public void setSalesPointId(String salesPointId) {
-        this.salesPointId = salesPointId;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PaymentEntity order = (PaymentEntity) o;
-        return Objects.equals(id, order.id) && Objects.equals(customerId, order.customerId)
-            && Objects.equals(salesPointId, order.salesPointId) && Objects.equals(createdAt, order.createdAt)
-            && Objects.equals(number, order.number);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, customerId, salesPointId, createdAt, number);
-    }
 }

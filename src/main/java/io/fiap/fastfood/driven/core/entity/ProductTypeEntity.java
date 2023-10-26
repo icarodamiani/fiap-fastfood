@@ -4,13 +4,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public record ProductTypeEntity(
     @Field("id_categoria")
-    Long id,
+    String id,
     @Field("descricao")
     String description) {
 
 
     public static final class ProductTypeEntityBuilder {
-        private Long id;
+        private String id;
         private String description;
 
         private ProductTypeEntityBuilder() {
@@ -20,7 +20,7 @@ public record ProductTypeEntity(
             return new ProductTypeEntityBuilder();
         }
 
-        public ProductTypeEntityBuilder withId(Long id) {
+        public ProductTypeEntityBuilder withId(String id) {
             this.id = id;
             return this;
         }
