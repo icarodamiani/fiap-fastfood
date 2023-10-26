@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping(value = "/v1/order-tracking", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/tracking", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderTrackingController {
 
     private static final Logger LOGGER = getLogger(OrderTrackingController.class);
@@ -61,7 +56,7 @@ public class OrderTrackingController {
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @GetMapping("/order")
+    @GetMapping("/{orderId}")
     @Operation(description = "Find order by id")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -69,38 +64,28 @@ public class OrderTrackingController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<OrderTrackingDTO> find(@RequestParam String orderId) {
-        return orderTrackingUseCase.find(orderId)
+    public Mono<OrderTrackingDTO> findByOrderId(@PathVariable String orderId) {
+        return orderTrackingUseCase.findByOrderId(orderId)
                 .map(orderTrackingMapper::dtoFromDomain)
                 .onErrorMap(e ->
                         new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @GetMapping("/orders/all")
-    @Operation(description = "Find all orders with status not FINISHED")
+    @GetMapping("/report")
+    @Operation(description = "Tracking report")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Flux<OrderTrackingDTO> findAll(Pageable pageable) {
-        AtomicInteger start = new AtomicInteger();
-        AtomicInteger end = new AtomicInteger();
-        return orderTrackingUseCase.findAll(pageable)
-                .map(orderTrackingMapper::dtoFromDomain)
-                .collectList()
-                .doOnNext(orderTrackingDTOS -> {
-                    start.set(Math.min((int) pageable.getOffset(), orderTrackingDTOS.size()));
-                    end.set(Math.min((start.get() + pageable.getPageSize()), orderTrackingDTOS.size()));
-                })
-                .map(orderTrackingDTOS -> (Page<OrderTrackingDTO>) new PageImpl<>(orderTrackingDTOS
-                        .subList(start.get(), end.get()), pageable, orderTrackingDTOS.size()))
-                .map(Slice::getContent)
-                .flatMapMany(Flux::fromIterable)
-                .onErrorMap(e ->
-                        new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
-                .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
+    public Flux<OrderTrackingDTO> find(Pageable pageable) {
+        return orderTrackingUseCase.find(pageable)
+            .map(orderTrackingMapper::dtoFromDomain)
+            .onErrorMap(e ->
+                new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
+            .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
+
 }

@@ -25,6 +25,7 @@ public record OrderTrackingEntity(
         @Field("data_hora")
         LocalDateTime orderDateTime,
 
+        @Field("tempo_decorrido")
         Long orderTimeSpent
 ) {
 

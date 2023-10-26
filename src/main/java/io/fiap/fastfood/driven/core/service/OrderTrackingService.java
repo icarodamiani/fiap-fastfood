@@ -23,16 +23,13 @@ public class OrderTrackingService implements OrderTrackingUseCase {
     }
 
     @Override
-    public Mono<OrderTracking> find(String orderId) {
-        return orderTrackingPort.findOrderTracking(orderId);
+    public Mono<OrderTracking> findByOrderId(String orderId) {
+        return orderTrackingPort.findByOrderId(orderId);
     }
 
-    /*
-    / Find all orders with status not FINISHED
-     */
     @Override
-    public Flux<OrderTracking> findAll(Pageable pageable) {
-        return orderTrackingPort.findAllOrders(pageable);
+    public Flux<OrderTracking> find(Pageable pageable) {
+        return orderTrackingPort.find(pageable);
     }
 
 }

@@ -8,8 +8,7 @@ import reactor.core.publisher.Mono;
 public interface OrderTrackingPort {
     Mono<OrderTracking> createOrderTracking(OrderTracking orderTracking);
 
-    Mono<OrderTracking> findOrderTracking(String orderId);
+    Mono<OrderTracking> findByOrderId(String orderId);
 
-    Flux<OrderTracking> findAllOrders(Pageable pageable);
-
+    Flux<OrderTracking> find(Pageable pageable);
 }

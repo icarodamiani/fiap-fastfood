@@ -44,18 +44,19 @@ public class OrderService implements OrderUseCase {
             )
             .flatMap(o ->
                 paymentPort.createPayment(Payment.PaymentBuilder.from(order.payment())
-                        .withOrderNumber(o.number())
+                        .withOrderId(o.id())
+                        .withDateTime(LocalDateTime.now())
                         .build())
-                    .flatMap(this::createWaitingPaymentStatus)
+                    .flatMap(p -> this.createWaitingPaymentStatus(p, o.number()))
                     .map(payment -> o)
             );
     }
 
-    private Mono<OrderTracking> createWaitingPaymentStatus(Payment payment) {
+    private Mono<OrderTracking> createWaitingPaymentStatus(Payment payment, Long orderNumber) {
         return trackingPort.createOrderTracking(OrderTracking.OrderTrackingBuilder.builder()
             .withRole("EMPLOYEE")
             .withOrderId(payment.orderId())
-            .withOrderNumber(String.valueOf(payment.orderNumber()))
+            .withOrderNumber(String.valueOf(orderNumber))
             .withOrderDateTime(LocalDateTime.now())
             .withOrderStatus("WAITING_PAYMENT")
             .build());

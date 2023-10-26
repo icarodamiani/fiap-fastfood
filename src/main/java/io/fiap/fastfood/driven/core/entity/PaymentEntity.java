@@ -17,14 +17,14 @@ public record PaymentEntity(
     @Field("data_hora")
     LocalDateTime dateTime,
     @Field("id_pedido")
-    Long orderId) {
+    String orderId) {
 
     public static final class PaymentEntityBuilder {
         private String id;
         private String method;
         private BigDecimal amount;
         private LocalDateTime dateTime;
-        private Long orderId;
+        private String orderId;
 
         private PaymentEntityBuilder() {
         }
@@ -53,7 +53,7 @@ public record PaymentEntity(
             return this;
         }
 
-        public PaymentEntityBuilder withOrderId(Long orderId) {
+        public PaymentEntityBuilder withOrderId(String orderId) {
             this.orderId = orderId;
             return this;
         }
