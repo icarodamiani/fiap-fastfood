@@ -7,19 +7,14 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record OrderTrackingDTO(
-
         @Schema(accessMode = Schema.AccessMode.READ_ONLY)
         String id,
-
         @NotNull
         String orderId,
-
         @NotNull
         String orderNumber,
-
         @NotNull
         OrderTrackingStatusTypeDTO orderStatus,
-
         @NotNull
         OrderTrackingRoleTypeDTO role,
         @Schema(accessMode = Schema.AccessMode.READ_ONLY)

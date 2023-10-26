@@ -1,7 +1,7 @@
 package io.fiap.fastfood.driven.core.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -9,22 +9,21 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("pagamento")
 public record PaymentEntity(
     @Id
-    @Field("id_pagamento")
-    Long id,
+    String id,
     @Field("meio_pagamento")
     String method,
     @Field("valor")
     BigDecimal amount,
     @Field("data_hora")
-    Date date,
+    LocalDateTime dateTime,
     @Field("id_pedido")
     Long orderId) {
 
     public static final class PaymentEntityBuilder {
-        private Long id;
+        private String id;
         private String method;
         private BigDecimal amount;
-        private Date date;
+        private LocalDateTime dateTime;
         private Long orderId;
 
         private PaymentEntityBuilder() {
@@ -34,7 +33,7 @@ public record PaymentEntity(
             return new PaymentEntityBuilder();
         }
 
-        public PaymentEntityBuilder withId(Long id) {
+        public PaymentEntityBuilder withId(String id) {
             this.id = id;
             return this;
         }
@@ -49,8 +48,8 @@ public record PaymentEntity(
             return this;
         }
 
-        public PaymentEntityBuilder withDate(Date date) {
-            this.date = date;
+        public PaymentEntityBuilder withDateTime(LocalDateTime dateTime) {
+            this.dateTime = dateTime;
             return this;
         }
 
@@ -60,7 +59,7 @@ public record PaymentEntity(
         }
 
         public PaymentEntity build() {
-            return new PaymentEntity(id, method, amount, date, orderId);
+            return new PaymentEntity(id, method, amount, dateTime, orderId);
         }
     }
 

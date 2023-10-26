@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driven.core.domain.order.tracking.port.outbound;
+package io.fiap.fastfood.driven.core.domain.tracking.port.outbound;
 
 import io.fiap.fastfood.driven.core.domain.model.OrderTracking;
 import org.springframework.data.domain.Pageable;

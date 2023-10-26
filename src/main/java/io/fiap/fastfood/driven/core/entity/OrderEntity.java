@@ -9,21 +9,20 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("pedido")
 public record OrderEntity(
     @Id
-    @Field("id_pedido")
-    Long id,
+    String id,
     @Field("id_cliente")
-    CustomerEntity customerId,
-    @Field("lista_item_pedido")
-    List<OrderItemEntity> orderItemList,
+    String customerId,
+    @Field("items")
+    List<OrderItemEntity> items,
     @Field("data_hora")
     Date createdAt,
     @Field("numero_pedido")
     Long number) {
 
         public static final class OrderEntityBuilder {
-            private Long id;
-            private CustomerEntity customerId;
-            private List<OrderItemEntity> orderItemList;
+            private String id;
+            private String customerId;
+            private List<OrderItemEntity> items;
             private Date createdAt;
             private Long number;
 
@@ -34,18 +33,18 @@ public record OrderEntity(
                 return new OrderEntityBuilder();
             }
     
-            public OrderEntityBuilder withId(Long id) {
+            public OrderEntityBuilder withId(String id) {
                 this.id = id;
                 return this;
             }
     
-            public OrderEntityBuilder withCustomerId(CustomerEntity customerId) {
+            public OrderEntityBuilder withCustomerId(String customerId) {
                 this.customerId = customerId;
                 return this;
             }
 
-            public OrderEntityBuilder withOrderItemList(List<OrderItemEntity> orderItemList) {
-                this.orderItemList = orderItemList;
+            public OrderEntityBuilder withItems(List<OrderItemEntity> items) {
+                this.items = items;
                 return this;
             }
 
@@ -60,7 +59,7 @@ public record OrderEntity(
             }
        
             public OrderEntity build() {
-                return new OrderEntity(id, customerId, orderItemList, createdAt, number);
+                return new OrderEntity(id, customerId, items, createdAt, number);
             }
         }
 

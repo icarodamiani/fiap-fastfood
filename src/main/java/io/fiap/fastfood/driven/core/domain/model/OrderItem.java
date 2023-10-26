@@ -1,8 +1,13 @@
 package io.fiap.fastfood.driven.core.domain.model;
 
+import java.util.Optional;
+
 public record OrderItem(
-    Long id,
-    Long productId,
+    String productId,
     Long amount,
     String quote) {
+
+    Optional<String> getQuote() {
+        return Optional.ofNullable(quote());
+    }
 }

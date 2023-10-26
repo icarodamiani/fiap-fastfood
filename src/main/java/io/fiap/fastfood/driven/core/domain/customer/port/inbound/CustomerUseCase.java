@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerUseCase {
     Mono<Customer> create(Customer value);
-    Mono<Void> delete(Long id);
-    Mono<Customer> update(Long id, String operations);
+    Mono<Void> delete(String id);
+    Mono<Customer> update(String id, String operations);
     Flux<Customer> list(Pageable pageable);
 }

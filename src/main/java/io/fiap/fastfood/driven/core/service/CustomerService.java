@@ -32,7 +32,7 @@ public class CustomerService implements CustomerUseCase {
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         return Mono.just(id)
             .switchIfEmpty(Mono.defer(() -> Mono.error(new BadRequestException())))
             .flatMap(productPort::deleteCustomer);
@@ -40,7 +40,7 @@ public class CustomerService implements CustomerUseCase {
 
 
     @Override
-    public Mono<Customer> update(Long id, String operations) {
+    public Mono<Customer> update(String id, String operations) {
         return productPort.updateCustomer(id, operations);
     }
 

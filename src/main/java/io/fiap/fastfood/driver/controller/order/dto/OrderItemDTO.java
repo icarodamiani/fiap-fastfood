@@ -1,34 +1,21 @@
 package io.fiap.fastfood.driver.controller.order.dto;
 
+import com.mongodb.lang.Nullable;
 import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
-public record OrderItemDTO(Long id,
-                           @NotNull Long productId,
+public record OrderItemDTO(@NotNull String productId,
                            @NotNull Long amount,
-                           @NotNull String quote) {
-
-    Optional<Long> getId() {
-        return Optional.ofNullable(id());
-    }
-
-    Optional<Long> getProductId() {
-        return Optional.ofNullable(productId());
-    }
-
-    Optional<Long> getAmount() {
-        return Optional.ofNullable(amount());
-    }
+                           @Nullable String quote) {
 
     Optional<String> getQuote() {
         return Optional.ofNullable(quote());
     }
 
     public static final class OrderItemDTOBuilder {
-        private Long id;
-        private @NotNull Long productId;
+        private @NotNull String productId;
         private @NotNull Long amount;
-        private @NotNull String quote;
+        private @Nullable String quote;
 
         private OrderItemDTOBuilder() {
         }
@@ -37,12 +24,7 @@ public record OrderItemDTO(Long id,
             return new OrderItemDTOBuilder();
         }
 
-        public OrderItemDTOBuilder withId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public OrderItemDTOBuilder withProductId(Long productId) {
+        public OrderItemDTOBuilder withProductId(String productId) {
             this.productId = productId;
             return this;
         }
@@ -58,7 +40,7 @@ public record OrderItemDTO(Long id,
         }
 
         public OrderItemDTO build() {
-            return new OrderItemDTO(id, productId, amount, quote);
+            return new OrderItemDTO(productId, amount, quote);
         }
     }
 }

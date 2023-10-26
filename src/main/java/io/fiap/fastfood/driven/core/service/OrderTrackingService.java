@@ -1,8 +1,8 @@
 package io.fiap.fastfood.driven.core.service;
 
 import io.fiap.fastfood.driven.core.domain.model.OrderTracking;
-import io.fiap.fastfood.driven.core.domain.order.tracking.port.inbound.OrderTrackingUseCase;
-import io.fiap.fastfood.driven.core.domain.order.tracking.port.outbound.OrderTrackingPort;
+import io.fiap.fastfood.driven.core.domain.tracking.port.inbound.OrderTrackingUseCase;
+import io.fiap.fastfood.driven.core.domain.tracking.port.outbound.OrderTrackingPort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

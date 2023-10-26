@@ -1,12 +1,13 @@
 package io.fiap.fastfood.driven.core.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Document("customer")
 public record CustomerEntity(
     @Id
-    @Field("id_cliente")
-    Long id,
+    String id,
     @Field("nome")
     String name,
     @Field("documento")
@@ -17,7 +18,7 @@ public record CustomerEntity(
     String number) {
 
     public static final class CustomerEntityBuilder {
-        private Long id;
+        private String id;
         private String name;
         private IdentityEntity identity;
         private String email;
@@ -30,7 +31,7 @@ public record CustomerEntity(
             return new CustomerEntityBuilder();
         }
 
-        public CustomerEntityBuilder withId(Long id) {
+        public CustomerEntityBuilder withId(String id) {
             this.id = id;
             return this;
         }

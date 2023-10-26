@@ -5,8 +5,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
-import io.fiap.fastfood.driven.core.exception.domain.order.mapper.OrderMapper;
-import io.fiap.fastfood.driven.core.exception.domain.order.port.inbound.OrderUseCase;
+import io.fiap.fastfood.driven.core.domain.order.mapper.OrderMapper;
+import io.fiap.fastfood.driven.core.domain.order.port.inbound.OrderUseCase;
 import io.fiap.fastfood.driver.controller.order.dto.OrderDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -75,7 +75,7 @@ public class OrderController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<OrderDTO>> update(@PathVariable Long id,
+    public Mono<ResponseEntity<OrderDTO>> update(@PathVariable String id,
                                                    @RequestBody String operations) {
         return orderUseCase.update(id, operations)
             .map(mapper::dtoFromDomain)
@@ -94,7 +94,7 @@ public class OrderController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
         return orderUseCase.delete(id)
             .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
             .defaultIfEmpty(ResponseEntity.noContent().build())
@@ -111,7 +111,7 @@ public class OrderController {
         @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
-    public Flux<OrderDTO> find(@RequestParam(required = false) Long id, Pageable pageable) {
+    public Flux<OrderDTO> find(@RequestParam(required = false) String id, Pageable pageable) {
         return orderUseCase.list(id, pageable)
             .map(mapper::dtoFromDomain)
             .onErrorMap(e ->

@@ -5,26 +5,32 @@ import java.util.List;
 import java.util.Optional;
 
 public record Order(
-    Long id,
-    Customer customerId,
-    List<OrderItem> orderItemList,
+    String id,
+    String customerId,
+    List<OrderItem> items,
     Date createdAt,
-    Long number) {
+    Long number,
+    Payment payment) {
 
-    Optional<Long> getId() {
+    Optional<String> getId() {
         return Optional.ofNullable(id());
     }
 
-    Optional<Customer> getCustomer() {
-        return Optional.ofNullable(customerId());
+    Optional<Long> getNumber() {
+        return Optional.ofNullable(number());
+    }
+
+    Optional<Payment> getPayment() {
+        return Optional.ofNullable(payment());
     }
 
     public static final class OrderBuilder {
-        private Long id;
-        private Customer customerId;
-        private List<OrderItem> orderItemList;
+        private String id;
+        private String customerId;
+        private List<OrderItem> items;
         private Date createdAt;
         private Long number;
+        private Payment payment;
 
         private OrderBuilder() {
         }
@@ -33,18 +39,27 @@ public record Order(
             return new OrderBuilder();
         }
 
-        public OrderBuilder withId(Long id) {
+        public static OrderBuilder from(Order order) {
+            return OrderBuilder.builder()
+                .withId(order.id)
+                .withNumber(order.number)
+                .withCreatedAt(order.createdAt)
+                .withItems(order.items)
+                .withCustomerId(order.customerId);
+        }
+
+        public OrderBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public OrderBuilder withCustomer(Customer customerId) {
+        public OrderBuilder withCustomerId(String customerId) {
             this.customerId = customerId;
             return this;
         }
 
-        public OrderBuilder withOrderItem(List<OrderItem> orderItemList) {
-            this.orderItemList = orderItemList;
+        public OrderBuilder withItems(List<OrderItem> items) {
+            this.items = items;
             return this;
         }
 
@@ -58,8 +73,13 @@ public record Order(
             return this;
         }
 
+        public OrderBuilder withPayment(Payment payment) {
+            this.payment = payment;
+            return this;
+        }
+
         public Order build() {
-            return new Order(id, customerId, orderItemList, createdAt, number);
+            return new Order(id, customerId, items, createdAt, number, payment);
         }
     }
 }

@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driven.core.exception.domain.order.port.inbound;
+package io.fiap.fastfood.driven.core.domain.order.port.inbound;
 
 import io.fiap.fastfood.driven.core.domain.model.Order;
 import org.springframework.data.domain.Pageable;
@@ -8,9 +8,9 @@ import reactor.core.publisher.Mono;
 public interface OrderUseCase {
     Mono<Order> create(Order value);
 
-    Flux<Order> list(Long id, Pageable pageable);
+    Flux<Order> list(String id, Pageable pageable);
 
-    Mono<Void> delete(Long id);
+    Mono<Void> delete(String id);
 
-    Mono<Order> update(Long id, String operations);
+    Mono<Order> update(String id, String operations);
 }

@@ -11,33 +11,53 @@ public record OrderTracking(
         LocalDateTime orderDateTime
 
 ) {
-    @Override
-    public String id() {
-        return id;
-    }
+    public static final class OrderTrackingBuilder {
+        private String id;
+        private String orderId;
+        private String orderNumber;
+        private String orderStatus;
+        private String role;
+        private LocalDateTime orderDateTime;
 
-    @Override
-    public String orderId() {
-        return orderId;
-    }
+        private OrderTrackingBuilder() {
+        }
 
-    @Override
-    public String orderNumber() {
-        return orderNumber;
-    }
+        public static OrderTrackingBuilder builder() {
+            return new OrderTrackingBuilder();
+        }
 
-    @Override
-    public String orderStatus() {
-        return orderStatus;
-    }
+        public OrderTrackingBuilder withId(String id) {
+            this.id = id;
+            return this;
+        }
 
-    @Override
-    public String role() {
-        return role;
-    }
+        public OrderTrackingBuilder withOrderId(String orderId) {
+            this.orderId = orderId;
+            return this;
+        }
 
-    @Override
-    public LocalDateTime orderDateTime() {
-        return orderDateTime;
+        public OrderTrackingBuilder withOrderNumber(String orderNumber) {
+            this.orderNumber = orderNumber;
+            return this;
+        }
+
+        public OrderTrackingBuilder withOrderStatus(String orderStatus) {
+            this.orderStatus = orderStatus;
+            return this;
+        }
+
+        public OrderTrackingBuilder withRole(String role) {
+            this.role = role;
+            return this;
+        }
+
+        public OrderTrackingBuilder withOrderDateTime(LocalDateTime orderDateTime) {
+            this.orderDateTime = orderDateTime;
+            return this;
+        }
+
+        public OrderTracking build() {
+            return new OrderTracking(id, orderId, orderNumber, orderStatus, role, orderDateTime);
+        }
     }
 }

@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
-public interface OrderRepository extends ReactiveCrudRepository<OrderEntity, Long> {
+public interface OrderRepository extends ReactiveCrudRepository<OrderEntity, String> {
 
-    Flux<OrderEntity> findById(Long id, Pageable pageable);
+    Flux<OrderEntity> findById(String id, Pageable pageable);
 
     Flux<OrderEntity> findByIdNotNull(Pageable pageable);
 

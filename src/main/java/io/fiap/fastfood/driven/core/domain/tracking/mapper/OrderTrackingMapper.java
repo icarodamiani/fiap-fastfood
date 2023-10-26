@@ -1,4 +1,4 @@
-package io.fiap.fastfood.driven.core.domain.order.tracking.mapper;
+package io.fiap.fastfood.driven.core.domain.tracking.mapper;
 
 import io.fiap.fastfood.driven.core.domain.model.OrderTracking;
 import io.fiap.fastfood.driven.core.entity.OrderTrackingEntity;

@@ -2,8 +2,8 @@ package io.fiap.fastfood.driver.controller.tracking;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import io.fiap.fastfood.driven.core.domain.order.tracking.mapper.OrderTrackingMapper;
-import io.fiap.fastfood.driven.core.domain.order.tracking.port.inbound.OrderTrackingUseCase;
+import io.fiap.fastfood.driven.core.domain.tracking.mapper.OrderTrackingMapper;
+import io.fiap.fastfood.driven.core.domain.tracking.port.inbound.OrderTrackingUseCase;
 import io.fiap.fastfood.driven.core.exception.HttpStatusExceptionConverter;
 import io.fiap.fastfood.driver.controller.tracking.dto.OrderTrackingDTO;
 import io.swagger.v3.oas.annotations.Operation;

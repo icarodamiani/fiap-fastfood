@@ -1,35 +1,34 @@
 package io.fiap.fastfood.driver.controller.order.dto;
 
-import io.fiap.fastfood.driver.controller.customer.dto.CustomerDTO;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public record OrderDTO(Long id,
-                       @NotNull CustomerDTO customerId,
-                       @NotNull List<OrderItemDTO> orderItemList,
-                       @NotNull Date createdAt,
-                       @NotNull Long number) {
+public record OrderDTO(@Nullable String id,
+                       @NotNull String customerId,
+                       @NotNull List<OrderItemDTO> items,
+                       @NotNull LocalDateTime createdAt,
+                       @Nullable Long number,
+                       @NotNull PaymentDTO payment) {
 
-    Optional<Long> getId() {
+    Optional<String> getId() {
         return Optional.ofNullable(id());
     }
 
-    Optional<CustomerDTO> getCustomer() {
-        return Optional.ofNullable(customerId());
+    Optional<Long> getNumber() {
+        return Optional.ofNullable(number());
     }
 
-    Optional<List<OrderItemDTO>> getOrderItemList() {
-        return Optional.ofNullable(orderItemList());
-    }
 
     public static final class OrderDTOBuilder {
-        private Long id;
-        private @NotNull CustomerDTO customerId;
-        private @NotNull List<OrderItemDTO> orderItemList;
-        private @NotNull Date createdAt;
-        private @NotNull Long number;
+        private String id;
+        private @NotNull String customerId;
+        private @NotNull List<OrderItemDTO> items;
+        private @NotNull LocalDateTime createdAt;
+        private Long number;
+        private @NotNull PaymentDTO payment;
 
         private OrderDTOBuilder() {
         }
@@ -38,22 +37,22 @@ public record OrderDTO(Long id,
             return new OrderDTOBuilder();
         }
 
-        public OrderDTOBuilder withId(Long id) {
+        public OrderDTOBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public OrderDTOBuilder withCustomer(CustomerDTO customerId) {
+        public OrderDTOBuilder withCustomerId(String customerId) {
             this.customerId = customerId;
             return this;
         }
 
-        public OrderDTOBuilder withOrderItemList(List<OrderItemDTO> orderItemList) {
-            this.orderItemList = orderItemList;
+        public OrderDTOBuilder withItems(List<OrderItemDTO> orderItemList) {
+            this.items = orderItemList;
             return this;
         }
 
-        public OrderDTOBuilder withCreatedAt(Date createdAt) {
+        public OrderDTOBuilder withCreatedAt(LocalDateTime createdAt) {
             this.createdAt = createdAt;
             return this;
         }
@@ -63,8 +62,13 @@ public record OrderDTO(Long id,
             return this;
         }
 
+        public OrderDTOBuilder withPayment(PaymentDTO payment) {
+            this.payment = payment;
+            return this;
+        }
+
         public OrderDTO build() {
-            return new OrderDTO(id, customerId, orderItemList, createdAt, number);
+            return new OrderDTO(id, customerId, items, createdAt, number, payment);
         }
     }
 }

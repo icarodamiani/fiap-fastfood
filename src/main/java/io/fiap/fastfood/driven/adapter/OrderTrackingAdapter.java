@@ -1,8 +1,8 @@
 package io.fiap.fastfood.driven.adapter;
 
 import io.fiap.fastfood.driven.core.domain.model.OrderTracking;
-import io.fiap.fastfood.driven.core.domain.order.tracking.mapper.OrderTrackingMapper;
-import io.fiap.fastfood.driven.core.domain.order.tracking.port.outbound.OrderTrackingPort;
+import io.fiap.fastfood.driven.core.domain.tracking.mapper.OrderTrackingMapper;
+import io.fiap.fastfood.driven.core.domain.tracking.port.outbound.OrderTrackingPort;
 import io.fiap.fastfood.driven.core.exception.NotFoundException;
 import io.fiap.fastfood.driven.repository.OrderTrackingRepository;
 import org.springframework.data.domain.Pageable;
