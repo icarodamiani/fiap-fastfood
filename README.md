@@ -32,9 +32,7 @@ Termos utilizados na implementação (Presentes em Código)
 - **Esteira de Pedidos/Order Tracking**: Responsável pelo andamento e monitoramento do estado do pedido.
 - **Funcionário/Employee**: Funcionário do estabelecimento.
 
-# Detalhes da Implementação
-
-Como um primeiro MVP as seguintes funcionalidades foram implementadas:
+# Detalhes da Implementação MVP 1
 
 ## [Gerenciamento de produtos](src%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fproduct%2FProductController.java)
 A aplicação dispõe de operações que permitem a inserção, edição, listagem(paginada) e a remoção de produtos. Em detalhe a possibilidade de se filtar produtos por categoria ao listar os mesmos.
