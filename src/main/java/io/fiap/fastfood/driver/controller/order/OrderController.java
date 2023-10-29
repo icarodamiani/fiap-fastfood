@@ -86,23 +86,6 @@ public class OrderController {
             .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(description = "Delete a order")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Deleted."),
-        @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
-    })
-    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
-        return orderUseCase.delete(id)
-            .map(__ -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
-            .defaultIfEmpty(ResponseEntity.noContent().build())
-            .onErrorMap(e ->
-                new ResponseStatusException(httpStatusExceptionConverter.convert(e), e.getMessage(), e))
-            .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
-    }
-
     @GetMapping(produces = TEXT_EVENT_STREAM_VALUE)
     @Operation(description = "List orders")
     @ResponseStatus(HttpStatus.OK)

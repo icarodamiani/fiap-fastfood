@@ -20,6 +20,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
 @RequestMapping(value = "/v1/tracking", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -72,7 +73,7 @@ public class OrderTrackingController {
                 .doOnError(throwable -> LOGGER.error(throwable.getMessage(), throwable));
     }
 
-    @GetMapping("/report")
+    @GetMapping(value = "/report", produces = TEXT_EVENT_STREAM_VALUE)
     @Operation(description = "Tracking report")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
