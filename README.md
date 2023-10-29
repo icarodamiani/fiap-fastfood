@@ -81,7 +81,8 @@ Desta forma, implementamos uma sequence que é reiniciada na abertura de um novo
 
 ## [Pedido e Pagamento](src%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Forder%2FOrderController.java)
 Persistidos separadamente na base de dados, porém criados em conjunto ao se iniciar um novo pedido. 
-Quanto ao pagamento, não existem operações que exponham consultas ou edições ao mesmo. Sendo o estado do mesmo, nesta versão, mapeado em conjunto na esteira de pedidos.
+
+Para o pagamento não existem operações que exponham consultas ou edições ao mesmo, sendo o estado do mesmo, nesta versão, mapeado em conjunto na esteira de pedidos.
 
 Já para o pedido estão disponíveis as operações de inserção, edição e listagem. Sendo a listagem paginada e com opção de filtragem por id de pedido.
 
