@@ -12,7 +12,7 @@
 ![gerenciar produtos](challenge/produtos.png)
 ![acompanhamento de pedidos](challenge/acompanhamento_pedidos.png)
 
-## Recursos e Bibliotecas
+# Recursos e Bibliotecas
 - [x] Java 17
 - [x] Mongo
 - [x] Spring Boot
