@@ -124,7 +124,7 @@ O fluxo planejado da aplicação segue os seguintes passos:
 5. Atualização do estado do pedido na Esteira de Pedidos, conforme ordem: WAITING_PAYMENT > PAYMENT_CONFIRMED > PREPARING > READY > FINISHED
 6. Consulta por pedido ou através do relatório de pedidos.
 
-## Início rápido
+# Início rápido
 
 ```shell 
 docker-compose up
@@ -135,3 +135,4 @@ docker compose --file docker-compose-arm64.yaml up
 ```
 A aplicação será disponibilizada em [localhost:8080](http://localhost:8080), tendo seu swagger em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
 
+### [Coleções Postman / Insomnia](collection)
