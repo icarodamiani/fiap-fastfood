@@ -20,6 +20,7 @@ public class PaymentService implements PaymentUseCase {
     public Mono<Void> updateAsPaid(Payment payment) {
         return orderTrackingPort.findByOrderId(payment.orderId())
             .map(tracking -> OrderTracking.OrderTrackingBuilder.from(tracking)
+                .withId(null)
                 .withOrderStatus("PAYMENT_CONFIRMED")
                 .withOrderStatusValue("2")
                 .build())
