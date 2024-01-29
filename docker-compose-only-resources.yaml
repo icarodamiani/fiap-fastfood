@@ -16,29 +16,6 @@ services:
     volumes:
       - 'mongodb_data:/fastfood'
 
-  fastfood:
-    container_name: fiap-fastfood
-    restart: always
-    build:
-      context: fastfood-api/.
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
-    links:
-      - mongo
-    networks:
-      - fastfood-network
-    environment:
-      SPRING_PROFILES_ACTIVE: local
-      MONGODB_HOST: mongo
-      MONGODB_PORT: 27017
-      MONGODB_USERNAME: root
-      MONGODB_PASSWORD: rootpassword
-      MONGODB_DATABASE: fastfood
-      MONGODB_AUTHDB: admin
-
   rabbit:
     image: rabbitmq:3.12-management-alpine
     container_name: rabbit-mgmt
@@ -69,31 +46,6 @@ services:
       MONGODB_ROOT_PASSWORD: rootpassword
     volumes:
       - 'mongodb_data:/payment'
-
-  payment:
-    container_name: fiap-payment
-    restart: always
-    build:
-      context: payment-mock-api/.
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
-    depends_on:
-      - mongo_payment
-      - rabbit
-    links:
-      - mongo_payment
-      - rabbit
-    networks:
-      - fastfood-network
-    environment:
-      SPRING_PROFILES_ACTIVE: local
-      MONGODB_HOST: mongo-payment
-      MONGODB_PORT: 27018
-      MONGODB_USERNAME: root
-      MONGODB_PASSWORD: rootpassword
-      MONGODB_DATABASE: payment
-      MONGODB_AUTHDB: admin
 
 volumes:
   rabbit_data:
