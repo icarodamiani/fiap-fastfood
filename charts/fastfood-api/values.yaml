@@ -10,7 +10,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "0.1.0"
 
-imagePullSecrets: [{ name: "myregistrykey" }]
+imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 

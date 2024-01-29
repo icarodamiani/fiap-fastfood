@@ -33,7 +33,7 @@ Termos utilizados na implementação (Presentes em Código)
 - **Esteira de Pedidos/Order Tracking**: Responsável pelo andamento e monitoramento do estado do pedido.
 - **Funcionário/Employee**: Funcionário do estabelecimento.
 
-# Detalhes da Implementação MVP 1
+# Detalhes da Implementação MVP 2
 
 ## [Gerenciamento de produtos]([ProductController.java](fastfood-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fproduct%2FProductController.java))
 A aplicação dispõe de operações que permitem a inserção, edição, listagem(paginada) e a remoção de produtos. Em detalhe a possibilidade de se filtar produtos por categoria ao listar os mesmos.
@@ -119,16 +119,16 @@ Dispõe de operações que permitem a inserção, listagem por pedido e um relat
 ## [Pagamentos (Integração)]([payment-mock-api](payment-mock-api))
 Os pagamentos são inseridos em conjunto ao pedido, porém processados separadamente em uma api que mocka superficialmente os comportamentos de um broker de pagamentos.
 
-A operação de pagamento segue o seguinte flux:
+A operação de pagamento segue o seguinte fluxo:
 1. O cliente finaliza o preenchimento do pedido/pagamento [na controladora de pedidos do fastfood](fastfood-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Forder%2FOrderController.java);
 2. Ambas as entidades são persistidas;
-3. Uma requisição REST é feita para a [api de mock de pagamentos](payment-mock-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fpayment%2FPaymentController.java);
-4. [Api de mock de pagamentos](payment-mock-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fpayment%2FPaymentController.java) persiste o pagamento em seu lado e então o encaminha a uma fila para processamento assíncrono;
-5. Cada mensagem persistida na fila é lida e, neste mock, aprovada automáticamente;
-6. Ainda no mesmo processo da fila, é feita uma chamada de volta à api de [Fastfood](fastfood-api) para notificar do aceite daquele pagamento em questão;
-7. Ao receber a confirmação de pagamento, a api de [Fastfood](fastfood-api) registra um novo estado do pedido como 'PAYMENT_CONFIRMED'.
+3. Uma requisição REST é feita para a api de [mock de pagamentos](payment-mock-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fpayment%2FPaymentController.java);
+4. A api de [mock de pagamentos](payment-mock-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fpayment%2FPaymentController.java) persiste o pagamento em seu lado e então o encaminha a uma fila para processamento assíncrono;
+5. Cada mensagem persistida na fila é [lida](payment-mock-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fmessaging%2Fpayment%2FPaymentProcessorListener.java) e, neste mock, aprovada automáticamente;
+6. Ainda no mesmo processo da fila, é feita uma chamada de volta à api de [fastfood](fastfood-api) para notificar do aceite daquele pagamento em questão;
+7. Ao receber a confirmação de pagamento, a api de [fastfood](fastfood-api) registra um novo estado do pedido como 'PAYMENT_CONFIRMED'.
 
-Um detalhe importante é que o [mock Pagamentos](payment-mock-api) desconhece a api de [Fastfood](fastfood-api), sendo os passos 6 e 7 possíveis pois no payload de criação de um pagamento junto a api de [Pagamentos](payment-mock-api) exige-se uma URI de callback. 
+Um detalhe importante é que a api de [mock pagamentos](payment-mock-api) desconhece por completo a api de [fastfood](fastfood-api), sendo os passos 6 e 7 possíveis através de um campo obrigatório de callback no payload de [criação de um pagamento](payment-mock-api%2Fsrc%2Fmain%2Fjava%2Fio%2Ffiap%2Ffastfood%2Fdriver%2Fcontroller%2Fpayment%2FPaymentController.java). Simulando assim algo similar ao que ocorre na api do Mercado Pago, por exemplo.
 
 ## Fluxo da aplicação
 O fluxo planejado da aplicação segue os seguintes passos:
@@ -147,8 +147,59 @@ docker-compose up
 ```
 Ou, ao rodar em máquinas com processadores arm64:
 ```shell
-docker compose --file docker-compose-arm64.yaml up
+docker compose --file docker-compose.yaml up
 ```
 A aplicação será disponibilizada em [localhost:8080](http://localhost:8080), tendo seu swagger em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
 
-### [Coleções Postman / Insomnia](fastfood-api/collection)
+# Deploy
+O deploy das aplicações é feito e gerenciado através de Helm charts, estes localizados na pasta [charts](charts). Todos os charts apontam para imagens públicas e podem ser deployados em qualquer ordem. No entanto, em razão das dependências entre si, para que as aplicações estabilizem todos devem estar deployados.
+
+### Imagens
+[fastfood-api](charts%2Ffastfood-api): icarodamiani/fastfood-api:0.1.0 </br>
+[payment-mock-api](charts%2Fpayment-mock-api): icarodamiani/payment-mock-api:0.1.0 </br>
+[mongodb](charts%2Fmongodb): bitnami/mongodb </br>
+[rabbitmq](charts%2Frabbitmq): bitnami/rabbitmq
+
+### MongoDB
+```shell
+helm install mongodb bitnami/mongodb -f charts/mongodb/values.yaml
+```
+### RabbitMQ
+```shell
+helm install rabbitmq bitnami/rabbitmq -f charts/rabbitmq/values.yaml
+```
+### Fastfood API
+Para esta api um ingress é criado, expondo a mesma como http://fastfood-api.local. </br>
+
+Configurando ingress:
+Minikube:
+```
+minikube addons enable ingress
+minikube tunnel
+```
+Docker Desktop e outros:
+```
+helm upgrade --install ingress-nginx ingress-nginx \
+--repo https://kubernetes.github.io/ingress-nginx \
+--namespace ingress-nginx --create-namespace
+```
+
+$${\color{red}Pode ser necessária a inclusão do host no arquivo /etc/hosts ```127.0.0.1 fastfood-api.local```}$$
+
+```shell
+helm install fastfood-api charts/fastfood-api --values charts/fastfood-api/values.yaml
+```
+### Payment Mock API
+```shell
+helm install payment-mock-api charts/payment-mock-api --values charts/payment-mock-api/values.yaml
+```
+
+## [Coleções Postman / Insomnia](fastfood-api/collection)
+Ambas as coleções estão configuradas para apontar para http://localhost:8080, porém podem ser alteradas as variáveis url para que se adeque a uri/porta escolhia.
+
+### Postman
+![Postman Env Vars](postman-vars.png)
+
+### Insomnia
+![Insomnia Env Vars 1](insomnia-vars-1.png)
+![Insomnia Env Vars 2](insomnia-vars-2.png)
