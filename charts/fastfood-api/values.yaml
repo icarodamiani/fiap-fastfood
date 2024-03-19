@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: icarodamiani/fastfood-api
+  repository: ghcr.io/icarodamiani/fastfood-api
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.1.0"
+  tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,8 +40,11 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 8080
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 
 ingress:
   enabled: true

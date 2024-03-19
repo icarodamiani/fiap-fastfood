@@ -1,0 +1,152 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feat/workflow
+
+jobs:
+  build:
+    environment:
+      name: dev
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+    - name: Debug
+      run: ls -l
+
+    - name: Build with Gradle
+      run: ./gradlew clean build
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: jar
+        path: | 
+          **/build/libs/*.jar
+          !**/build/libs/*-plain.jar
+
+  publish:
+    environment:
+      name: dev
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: jar
+      - name: Docker-Compose GitHub Packages Publish
+        uses: soltys/publish-docker-compose@v1.0.0
+        with:
+          version: latest
+          docker_compose: docker-compose.yaml
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+
+  deploy:
+    environment:
+      name: dev
+    needs: [build, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: jar
+
+      - name: Deploy MongoDB
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: fiap-fastfood-g86
+          name: mongodb
+          config-files: charts/mongodb/values.yaml
+          chart-path: bitnamicharts/mongodb
+          chart-repository: oci://registry-1.docker.io
+          timeout: 20s
+
+      - name: Deploy RabbitMQ
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: fiap-fastfood-g86
+          config-files: charts/rabbitmq/values.yaml
+          name: rabbitmq
+          chart-path: bitnamicharts/rabbitmq
+          chart-repository: oci://registry-1.docker.io
+          timeout: 20s
+
+      - name: Deploy Payment Mock
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: fiap-fastfood-g86
+          name: payment-mock-api
+          chart-path: charts/payment-mock-api
+          config-files: charts/payment-mock-api/values.yaml
+          timeout: 20s
+
+      - name: Deploy Fastfood
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: fiap-fastfood-g86
+          name: fastfood-api
+          chart-path: charts/fastfood-api
+          config-files: charts/fastfood-api/values.yaml
+          timeout: 20s
