@@ -62,7 +62,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: jar
-          path: target
       - name: Docker-Compose GitHub Packages Publish
         uses: soltys/publish-docker-compose@v1.0.0
         with:
