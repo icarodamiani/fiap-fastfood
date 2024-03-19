@@ -42,6 +42,18 @@ jobs:
     - name: Build with Gradle Payment
       run: ./gradlew clean build -p payment-mock-api
 
+    - name: Upload Fastfood
+      uses: actions/upload-artifact@v4
+      with:
+        name: Package
+        path: fastfood-api/build/libs
+
+    - name: Upload Payment Mock
+      uses: actions/upload-artifact@v4
+      with:
+        name: Package
+        path: payment-mock-api/build/libs
+
   publish:
     needs: [build]
     runs-on: ubuntu-latest
