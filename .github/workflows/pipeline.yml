@@ -100,6 +100,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: jar
+
       - name: Deploy MongoDB
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
@@ -108,7 +109,8 @@ jobs:
           aws-region: us-east-1
           cluster-name: fiap-fastfood-g86
           name: mongodb
-          chart-path: charts/
+          config-files: charts/mongodb/values.yaml
+          chart-path: charts/mongodb
           timeout: 20s
 
       - name: Deploy RabbitMQ
@@ -119,7 +121,8 @@ jobs:
           aws-region: us-east-1
           cluster-name: fiap-fastfood-g86
           name: rabbitmq
-          chart-path: charts/
+          config-files: charts/rabbitmq/values.yaml
+          chart-path: charts/rabbitmq
           timeout: 20s
 
       - name: Deploy Payment Mock
@@ -130,7 +133,8 @@ jobs:
           aws-region: us-east-1
           cluster-name: fiap-fastfood-g86
           name: payment-mock-api
-          chart-path: charts/
+          chart-path: charts/payment-mock-api
+          config-files: charts/payment-mock-api/values.yaml
           timeout: 20s
 
       - name: Deploy Fastfood
@@ -141,5 +145,6 @@ jobs:
           aws-region: us-east-1
           cluster-name: fiap-fastfood-g86
           name: fastfood-api
-          chart-path: charts/
+          chart-path: charts/fastfood-api
+          config-files: charts/fastfood-api/values.yaml
           timeout: 20s
