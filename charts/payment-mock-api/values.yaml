@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: icarodamiani/payment-mock-api
+  repository: ghcr.io/icarodamiani/fastfood-api
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.1.0"
+  tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
