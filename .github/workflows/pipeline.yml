@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,57 +34,71 @@ jobs:
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
     - name: Build with Gradle Fastfood
-      run: ./fastfood-api/.gradlew build
+      run: fastfood-api/.gradlew build
 
     - name: Build with Gradle Payment
-      run: ./payment-mock-api/.gradlew build
-      
-    - name: Docker-Compose GitHub Packages Publish
-      uses: soltys/publish-docker-compose@v1.0.0
-      with:
-        version: 0.0.1
-        docker_compose: docker-compose.yaml
-    
-    - name: Deploy MongoDB
-      uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
-      with:
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-region: us-east-1
-        cluster-name: eks-cluster-fiap-fastfood-g86
-        name: mongodb
-        chart-path: charts/
-        timeout: 20s
+      run: payment-mock-api/.gradlew build
 
-    - name: Deploy RabbitMQ
-      uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
-      with:
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-region: us-east-1
-        cluster-name: eks-cluster-fiap-fastfood-g86
-        name: rabbitmq
-        chart-path: charts/
-        timeout: 20s
+  publish:
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Docker-Compose GitHub Packages Publish
+        uses: soltys/publish-docker-compose@v1.0.0
+        with:
+          version: 0.0.1
+          docker_compose: docker-compose.yaml
 
-    - name: Deploy Payment Mock
-      uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
-      with:
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-region: us-east-1
-        cluster-name: eks-cluster-fiap-fastfood-g86
-        name: payment-mock-api
-        chart-path: charts/
-        timeout: 20s
+  deploy:
+    needs: [publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Deploy MongoDB
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: eks-cluster-fiap-fastfood-g86
+          name: mongodb
+          chart-path: charts/
+          timeout: 20s
 
-    - name: Deploy Fastfood
-      uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
-      with:
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-region: us-east-1
-        cluster-name: eks-cluster-fiap-fastfood-g86
-        name: fastfood-api
-        chart-path: charts/
-        timeout: 20s
+      - name: Deploy RabbitMQ
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: eks-cluster-fiap-fastfood-g86
+          name: rabbitmq
+          chart-path: charts/
+          timeout: 20s
+
+      - name: Deploy Payment Mock
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: eks-cluster-fiap-fastfood-g86
+          name: payment-mock-api
+          chart-path: charts/
+          timeout: 20s
+
+      - name: Deploy Fastfood
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+          cluster-name: eks-cluster-fiap-fastfood-g86
+          name: fastfood-api
+          chart-path: charts/
+          timeout: 20s
