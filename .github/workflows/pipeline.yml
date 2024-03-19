@@ -73,13 +73,6 @@ jobs:
           name: payment-mock-api
           path: payment-mock-api/build/libs
 
-  publish:
-    needs: [build, build_payment]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
       - name: Docker-Compose GitHub Packages Publish
         uses: soltys/publish-docker-compose@v1.0.0
         with:
