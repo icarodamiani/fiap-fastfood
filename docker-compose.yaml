@@ -2,12 +2,14 @@ version: '3.8'
 
 services:
   fastfood:
+    image: ghcr.io/icarodamiani/fiap-fastfood
     container_name: fiap-fastfood
     build:
       context: fastfood-api/.
       dockerfile: Dockerfile
 
   payment:
+    image: ghcr.io/icarodamiani/fiap-payment
     container_name: fiap-payment
     build:
       context: payment-mock-api/.
