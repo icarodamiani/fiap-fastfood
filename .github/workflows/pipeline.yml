@@ -39,23 +39,42 @@ jobs:
     - name: Build with Gradle Fastfood
       run: ./gradlew clean build -p fastfood-api
 
-    - name: Build with Gradle Payment
-      run: ./gradlew clean build -p payment-mock-api
-
     - name: Upload Fastfood
       uses: actions/upload-artifact@v4
       with:
         name: Package
         path: fastfood-api/build/libs
 
-    - name: Upload Payment Mock
-      uses: actions/upload-artifact@v4
-      with:
-        name: Package
-        path: payment-mock-api/build/libs
+  build_payment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+      - name: Build with Gradle Payment
+        run: ./gradlew clean build -p payment-mock-api
+
+      - name: Upload Payment Mock
+        uses: actions/upload-artifact@v4
+        with:
+          name: Package
+          path: payment-mock-api/build/libs
 
   publish:
-    needs: [build]
+    needs: [build, build_payment]
     runs-on: ubuntu-latest
     permissions:
       contents: read
