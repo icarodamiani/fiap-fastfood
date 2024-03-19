@@ -39,17 +39,13 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean build
 
-    - name: Upload Fastfood
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: fastfood-api.jar
-        path: fastfood-api/build/libs/*.jar
-
-    - name: Upload Fastfood
-      uses: actions/upload-artifact@v4
-      with:
-        name: payment-mock-api.jar
-        path: payment-mock-api/build/libs/*.jar
+        name: jar
+        path: | 
+          **/build/libs/*.jar
+          !**/build/libs/*-plain.jar
 
   publish:
     needs: [build]
@@ -61,12 +57,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: payment-mock-api.jar
-          path: target
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: fastfood-api.jar
+          name: jar
           path: target
       - name: Docker-Compose GitHub Packages Publish
         uses: soltys/publish-docker-compose@v1.0.0
