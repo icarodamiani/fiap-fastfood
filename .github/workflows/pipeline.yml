@@ -110,7 +110,8 @@ jobs:
           cluster-name: fiap-fastfood-g86
           name: mongodb
           config-files: charts/mongodb/values.yaml
-          chart-path: charts/mongodb
+          chart-path: bitnamicharts/mongodb
+          chart-repository: oci://registry-1.docker.io
           timeout: 20s
 
       - name: Deploy RabbitMQ
@@ -120,9 +121,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: us-east-1
           cluster-name: fiap-fastfood-g86
-          name: rabbitmq
           config-files: charts/rabbitmq/values.yaml
-          chart-path: charts/rabbitmq
+          name: rabbitmq
+          chart-path: bitnamicharts/rabbitmq
+          chart-repository: oci://registry-1.docker.io
           timeout: 20s
 
       - name: Deploy Payment Mock
