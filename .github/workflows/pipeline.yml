@@ -37,10 +37,10 @@ jobs:
       run: cd fastfood-api && ls -l
 
     - name: Build with Gradle Fastfood
-      run: ./fastfood-api/gradlew build
+      run: ./gradlew clean build -p fastfood-api
 
     - name: Build with Gradle Payment
-      run: ./payment-mock-api/gradlew build
+      run: ./gradlew clean build -p payment-mock-api
 
   publish:
     needs: [build]
