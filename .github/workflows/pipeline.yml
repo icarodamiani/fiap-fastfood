@@ -15,7 +15,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    runs-on: self-hosted
+    container:
+      image: openjdk:17.0.1-jdk-slim
     permissions:
       contents: read
       packages: write
@@ -48,8 +52,16 @@ jobs:
           !**/build/libs/*-plain.jar
 
   publish:
-    needs: [build]
-    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs: [ build ]
+    runs-on: self-hosted
+    container:
+      image: docker:20-dind
+    services:
+      docker:
+        image: docker:20-dind
+        options: --privileged
     permissions:
       contents: read
       packages: write
@@ -66,6 +78,8 @@ jobs:
           docker_compose: docker-compose.yaml
 
   deploy:
+    environment:
+      name: dev
     needs: [publish]
     runs-on: ubuntu-latest
     permissions:
