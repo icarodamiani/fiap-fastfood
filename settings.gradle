@@ -1,0 +1,3 @@
+rootProject.name = 'parent'
+include "fastfood-api"
+include "payment-mock-api"
