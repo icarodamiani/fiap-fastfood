@@ -73,8 +73,9 @@ jobs:
       - name: Docker-Compose GitHub Packages Publish
         uses: soltys/publish-docker-compose@v1.0.0
         with:
-          version: 0.0.1
+          version: latest
           docker_compose: docker-compose.yaml
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
 
   deploy:
     environment:
@@ -86,10 +87,9 @@ jobs:
       packages: write
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: jar
-          path: target
       - name: Deploy MongoDB
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
