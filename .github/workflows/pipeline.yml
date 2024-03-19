@@ -34,13 +34,13 @@ jobs:
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
     - name: Debug
-      run: ls -l
+      run: cd fastfood-api && ls -l
 
     - name: Build with Gradle Fastfood
-      run: fastfood-api/.gradlew build
+      run: /fastfood-api/.gradlew build
 
     - name: Build with Gradle Payment
-      run: payment-mock-api/.gradlew build
+      run: /payment-mock-api/.gradlew build
 
   publish:
     needs: [build]
