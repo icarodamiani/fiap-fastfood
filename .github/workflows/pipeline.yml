@@ -79,13 +79,6 @@ jobs:
           version: 0.0.1
           docker_compose: docker-compose.yaml
 
-  deploy:
-    needs: [publish]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
       - name: Deploy MongoDB
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
