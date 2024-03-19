@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: docker.io/zcube/bitnami-compat-mongodb:5.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - fastfood-network
+    environment:
+      MONGODB_USERNAME: common_user
+      MONGODB_PASSWORD: password123
+      MONGODB_DATABASE: fastfood
+      MONGODB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - 'mongodb_data:/fastfood'
+
+  fastfood:
+    container_name: fiap-fastfood
+    restart: always
+    build:
+      context: fastfood-api/.
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    networks:
+      - fastfood-network
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: rootpassword
+      MONGODB_DATABASE: fastfood
+      MONGODB_AUTHDB: admin
+
+  rabbit:
+    image: rabbitmq:3.12-management-alpine
+    container_name: rabbit-mgmt
+    ports:
+      - 25672:25672
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - fastfood-network
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: rootpassword
+    volumes:
+      - 'rabbit_data:/var/lib/rabbitmq/'
+    restart: always
+
+  mongo_payment:
+    image: docker.io/zcube/bitnami-compat-mongodb:5.0
+    container_name: mongo-payment
+    ports:
+      - "27018:27017"
+    networks:
+      - fastfood-network
+    environment:
+      MONGODB_USERNAME: common_user
+      MONGODB_PASSWORD: password123
+      MONGODB_DATABASE: payment
+      MONGODB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - 'mongodb_data:/payment'
+
+  payment:
+    container_name: fiap-payment
+    restart: always
+    build:
+      context: payment-mock-api/.
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mongo_payment
+      - rabbit
+    links:
+      - mongo_payment
+      - rabbit
+    networks:
+      - fastfood-network
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      MONGODB_HOST: mongo-payment
+      MONGODB_PORT: 27018
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: rootpassword
+      MONGODB_DATABASE: payment
+      MONGODB_AUTHDB: admin
+
+volumes:
+  rabbit_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  logs-folder:
+    name: ${log_rabbit-mgmt}
+    driver: local
+
+networks:
+  fastfood-network:
+    driver: bridge

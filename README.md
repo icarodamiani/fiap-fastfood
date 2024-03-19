@@ -147,7 +147,7 @@ docker-compose up
 ```
 Ou, ao rodar em máquinas com processadores arm64:
 ```shell
-docker compose --file docker-compose.yaml up
+docker compose --file docker-compose-arm64.yaml up
 ```
 A aplicação será disponibilizada em [localhost:8080](http://localhost:8080), tendo seu swagger em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
 
