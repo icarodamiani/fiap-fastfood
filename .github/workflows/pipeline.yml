@@ -42,7 +42,7 @@ jobs:
     - name: Upload Fastfood
       uses: actions/upload-artifact@v4
       with:
-        name: Package
+        name: fastfood-api
         path: fastfood-api/build/libs
 
   build_payment:
@@ -70,7 +70,7 @@ jobs:
       - name: Upload Payment Mock
         uses: actions/upload-artifact@v4
         with:
-          name: Package
+          name: payment-mock-api
           path: payment-mock-api/build/libs
 
   publish:
