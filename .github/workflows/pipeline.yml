@@ -73,12 +73,36 @@ jobs:
           name: payment-mock-api
           path: payment-mock-api/build/libs
 
+  publish:
+    needs: [build, build_payment]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: jar
+          path: target
       - name: Docker-Compose GitHub Packages Publish
         uses: soltys/publish-docker-compose@v1.0.0
         with:
           version: 0.0.1
           docker_compose: docker-compose.yaml
 
+  deploy:
+    needs: [publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: jar
+          path: target
       - name: Deploy MongoDB
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
