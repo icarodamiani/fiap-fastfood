@@ -106,7 +106,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: us-east-1
-          cluster-name: eks-cluster-fiap-fastfood-g86
+          cluster-name: fiap-fastfood-g86
           name: mongodb
           chart-path: charts/
           timeout: 20s
@@ -117,7 +117,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: us-east-1
-          cluster-name: eks-cluster-fiap-fastfood-g86
+          cluster-name: fiap-fastfood-g86
           name: rabbitmq
           chart-path: charts/
           timeout: 20s
@@ -128,7 +128,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: us-east-1
-          cluster-name: eks-cluster-fiap-fastfood-g86
+          cluster-name: fiap-fastfood-g86
           name: payment-mock-api
           chart-path: charts/
           timeout: 20s
@@ -139,7 +139,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: us-east-1
-          cluster-name: eks-cluster-fiap-fastfood-g86
+          cluster-name: fiap-fastfood-g86
           name: fastfood-api
           chart-path: charts/
           timeout: 20s
